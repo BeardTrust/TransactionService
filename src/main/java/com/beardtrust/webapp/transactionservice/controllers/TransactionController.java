@@ -108,7 +108,7 @@ public class TransactionController {
 	}
 
 	@GetMapping(path = "/transactions/loan")
-	public ResponseEntity<Page<FinancialTransactionDTO>> getLoanTransactions(Pageable page){
+	public ResponseEntity<Page<FinancialTransactionDTO>> getLoanTransactions(Pageable page) {
 		log.trace("Start of TransactionController.getLoanTransactions(" + page + ")");
 
 		ResponseEntity<Page<FinancialTransactionDTO>> response;

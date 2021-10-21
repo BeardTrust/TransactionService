@@ -80,8 +80,8 @@ public class TransactionServiceImpl implements TransactionService {
 
 		try {
 			financialTransactions = financialTransactionRepository.findAll(page)
-							.map(transaction -> modelMapper.map(transaction,
-									FinancialTransactionDTO.class));
+					.map(transaction -> modelMapper.map(transaction,
+							FinancialTransactionDTO.class));
 
 			log.info("Retrieved financial transactions");
 		} catch (Exception e) {
@@ -110,7 +110,7 @@ public class TransactionServiceImpl implements TransactionService {
 		try {
 			accountTransactions = accountTransactionRepository.findAll(page)
 					.map(transaction -> modelMapper.map(transaction,
-					FinancialTransactionDTO.class));
+							FinancialTransactionDTO.class));
 
 			log.info("Retrieved account transactions");
 		} catch (Exception e) {
@@ -163,13 +163,13 @@ public class TransactionServiceImpl implements TransactionService {
 
 		Page<FinancialTransactionDTO> loanTransactions = null;
 
-		try{
+		try {
 			loanTransactions = loanTransactionRepository.findAll(page)
 					.map(transaction -> modelMapper.map(transaction,
 							FinancialTransactionDTO.class));
 
 			log.info("Retrieved loan transactions");
-		} catch(Exception e){
+		} catch (Exception e) {
 			log.debug("Exception encountered while retrieving loan transactions:\n" + e.getMessage());
 		}
 
