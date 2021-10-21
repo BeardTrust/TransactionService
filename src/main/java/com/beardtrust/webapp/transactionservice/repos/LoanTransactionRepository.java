@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 
 /**
- * This is the repository for Card Transactions.
+ * This is the repository for Loan Transactions.
  *
  * @author Matthew.Crowell@Smoothstack.com
  */

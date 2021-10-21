@@ -1,10 +1,9 @@
 package com.beardtrust.webapp.transactionservice.controllers;
 
-import com.beardtrust.webapp.transactionservice.entities.AccountTransaction;
-import com.beardtrust.webapp.transactionservice.entities.CardTransaction;
-import com.beardtrust.webapp.transactionservice.entities.FinancialTransaction;
+import com.beardtrust.webapp.transactionservice.dtos.FinancialTransactionDTO;
 import com.beardtrust.webapp.transactionservice.services.TransactionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/")
 @RequiredArgsConstructor
+@Slf4j
 public class TransactionController {
 
 	private final TransactionService transactionService;
@@ -36,7 +36,7 @@ public class TransactionController {
 	@GetMapping(path = "/transactions/health")
 	public ResponseEntity<String> checkHealth() {
 		String status = transactionService.checkHealth();
-		ResponseEntity<String> response = null;
+		ResponseEntity<String> response;
 
 		if (status.equals("Healthy")) {
 			response = new ResponseEntity<>(status, HttpStatus.OK);
@@ -55,8 +55,16 @@ public class TransactionController {
 	 * @return a Page<FinancialTransaction> object
 	 */
 	@GetMapping(path = "/transactions")
-	public Page<FinancialTransaction> getAllTransactions(Pageable page) {
-		return transactionService.getAllTransactions(page);
+	public ResponseEntity<Page<FinancialTransactionDTO>> getAllTransactions(Pageable page) {
+		log.trace("Start of TransactionController.getAllTransactions(" + page + ")");
+
+		ResponseEntity<Page<FinancialTransactionDTO>> response;
+
+		response = new ResponseEntity<>(transactionService.getAllTransactions(page), HttpStatus.OK);
+
+		log.trace("End of TransactionController.getAllTransactions(" + page + ")");
+
+		return response;
 	}
 
 	/**
@@ -67,8 +75,16 @@ public class TransactionController {
 	 * @return a Page<AccountTransaction> object
 	 */
 	@GetMapping(path = "/transactions/account")
-	public Page<AccountTransaction> getAccountTransactions(Pageable page) {
-		return transactionService.getAccountTransactions(page);
+	public ResponseEntity<Page<FinancialTransactionDTO>> getAccountTransactions(Pageable page) {
+		log.trace("Start of TransactionController.getAccountTransactions(" + page + ")");
+
+		ResponseEntity<Page<FinancialTransactionDTO>> response;
+
+		response = new ResponseEntity<>(transactionService.getAccountTransactions(page), HttpStatus.OK);
+
+		log.trace("End of TransactionController.getAccountTransactions(" + page + ")");
+
+		return response;
 	}
 
 	/**
@@ -79,7 +95,27 @@ public class TransactionController {
 	 * @return a Page<CardTransaction> object
 	 */
 	@GetMapping(path = "/transactions/card")
-	public Page<CardTransaction> getCardTransactions(Pageable page) {
-		return transactionService.getCardTransactions(page);
+	public ResponseEntity<Page<FinancialTransactionDTO>> getCardTransactions(Pageable page) {
+		log.trace("Start of TransactionController.getCardTransactions(" + page + ")");
+
+		ResponseEntity<Page<FinancialTransactionDTO>> response;
+
+		response = new ResponseEntity<>(transactionService.getCardTransactions(page), HttpStatus.OK);
+
+		log.trace("End of TransactionController.getCardTransactions(" + page + ")");
+
+		return response;
+	}
+
+	@GetMapping(path = "/transactions/loan")
+	public ResponseEntity<Page<FinancialTransactionDTO>> getLoanTransactions(Pageable page){
+		log.trace("Start of TransactionController.getLoanTransactions(" + page + ")");
+
+		ResponseEntity<Page<FinancialTransactionDTO>> response;
+
+		response = new ResponseEntity<>(transactionService.getLoanTransactions(page), HttpStatus.OK);
+
+		log.trace("End of TransactionController.getLoanTransactions(" + page + ")");
+		return response;
 	}
 }

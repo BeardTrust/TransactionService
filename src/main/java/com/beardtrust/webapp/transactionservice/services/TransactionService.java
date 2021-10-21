@@ -1,8 +1,6 @@
 package com.beardtrust.webapp.transactionservice.services;
 
-import com.beardtrust.webapp.transactionservice.entities.AccountTransaction;
-import com.beardtrust.webapp.transactionservice.entities.CardTransaction;
-import com.beardtrust.webapp.transactionservice.entities.FinancialTransaction;
+import com.beardtrust.webapp.transactionservice.dtos.FinancialTransactionDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -26,7 +24,7 @@ public interface TransactionService {
 	 * @param page a Pageable object to request a Page
 	 * @return a Page<FinancialTransaction> object
 	 */
-	Page<FinancialTransaction> getAllTransactions(Pageable page);
+	Page<FinancialTransactionDTO> getAllTransactions(Pageable page);
 
 	/**
 	 * This method returns a Page of Account Transactions in the database.
@@ -34,7 +32,7 @@ public interface TransactionService {
 	 * @param page a Pageable object to request a Page
 	 * @return a Page<AccountTransaction> object
 	 */
-	Page<AccountTransaction> getAccountTransactions(Pageable page);
+	Page<FinancialTransactionDTO> getAccountTransactions(Pageable page);
 
 	/**
 	 * This method returns a Page of Card Transactions in the database.
@@ -42,5 +40,7 @@ public interface TransactionService {
 	 * @param page a Pageable object to request a Page
 	 * @return a Page<CardTransaction> object
 	 */
-	Page<CardTransaction> getCardTransactions(Pageable page);
+	Page<FinancialTransactionDTO> getCardTransactions(Pageable page);
+
+	Page<FinancialTransactionDTO> getLoanTransactions(Pageable page);
 }
