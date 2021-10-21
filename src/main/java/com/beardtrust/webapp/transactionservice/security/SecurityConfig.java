@@ -33,9 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.cors()
-				.and().authorizeRequests().anyRequest().permitAll();
-//				.and()
-//				.addFilter(new AuthorizationFilter(authenticationManager(), environment, authorizationService));
+				.and().authorizeRequests()
+				.antMatchers("/api/swagger-ui/**").permitAll()
+				.and()
+				.addFilter(new AuthorizationFilter(authenticationManager(), environment, authorizationService));
 		http.headers().frameOptions().disable();
 	}
 }
