@@ -23,6 +23,7 @@ public class TransactionType {
 	private String typeDescription;
 	private String sourceDescription;
 	private String targetDescription;
+	@JsonIgnore
 	@OneToMany(mappedBy = "transactionType")
 	private Set<FinancialTransaction> transactions;
 

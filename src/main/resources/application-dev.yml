@@ -18,9 +18,9 @@ spring:
       settings:
         web-allow-others: true
   datasource:
-    url: jdbc:mariadb://beardtrustdb.czyy1xbuk4j2.us-east-2.rds.amazonaws.com/BeardTrust_Dev
-    username: basileios
-    password: EBzrA8x6OcRfZL00dzG9uND6yXANpMetzr7K
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PWORD}
     driver-class-name: org.mariadb.jdbc.Driver
 authorization:
   token:
