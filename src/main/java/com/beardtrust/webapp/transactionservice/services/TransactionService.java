@@ -1,6 +1,7 @@
 package com.beardtrust.webapp.transactionservice.services;
 
 import com.beardtrust.webapp.transactionservice.dtos.FinancialTransactionDTO;
+import com.beardtrust.webapp.transactionservice.models.NewTransactionModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -43,4 +44,6 @@ public interface TransactionService {
 	Page<FinancialTransactionDTO> getCardTransactions(Pageable page);
 
 	Page<FinancialTransactionDTO> getLoanTransactions(Pageable page);
+
+	FinancialTransactionDTO createTransaction(NewTransactionModel transaction);
 }

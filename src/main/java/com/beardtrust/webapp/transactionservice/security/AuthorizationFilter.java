@@ -59,7 +59,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		} else {
-			log.error("Incoming request missing required components");
+			log.debug("Incoming request missing expected headers");
 		}
 		chain.doFilter(request, response);
 	}

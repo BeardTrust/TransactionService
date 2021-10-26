@@ -1,16 +1,13 @@
 package com.beardtrust.webapp.transactionservice.dtos;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.beardtrust.webapp.transactionservice.entities.CurrencyValue;
 import com.beardtrust.webapp.transactionservice.entities.UserEntity;
 
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class AccountDTOTest {
 	@Test
@@ -29,7 +26,7 @@ class AccountDTOTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -72,7 +69,7 @@ class AccountDTOTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 		actualAccountDTO.setUser(userEntity);
@@ -95,7 +92,7 @@ class AccountDTOTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -113,7 +110,7 @@ class AccountDTOTest {
 		accountDTO.setId("42");
 		accountDTO.setType("Type");
 		accountDTO.setActiveStatus(true);
-		assertFalse(accountDTO.equals(null));
+		assertNotEquals(null, accountDTO);
 	}
 
 	@Test
@@ -125,7 +122,7 @@ class AccountDTOTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -155,7 +152,7 @@ class AccountDTOTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -187,7 +184,7 @@ class AccountDTOTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -213,7 +210,7 @@ class AccountDTOTest {
 		userEntity1.setRole("Role");
 		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity1.setUsername("janedoe");
-		userEntity1.setId("42");
+		userEntity1.setUserId("42");
 		userEntity1.setPhone("4105551212");
 		userEntity1.setFirstName("Jane");
 

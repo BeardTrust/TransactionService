@@ -1,22 +1,24 @@
 package com.beardtrust.webapp.transactionservice.services;
 
 import com.beardtrust.webapp.transactionservice.dtos.FinancialTransactionDTO;
-import com.beardtrust.webapp.transactionservice.entities.AccountTransaction;
-import com.beardtrust.webapp.transactionservice.entities.CardTransaction;
-import com.beardtrust.webapp.transactionservice.entities.FinancialTransaction;
-import com.beardtrust.webapp.transactionservice.entities.LoanTransaction;
-import com.beardtrust.webapp.transactionservice.repos.AccountTransactionRepository;
-import com.beardtrust.webapp.transactionservice.repos.CardTransactionRepository;
-import com.beardtrust.webapp.transactionservice.repos.FinancialTransactionRepository;
-import com.beardtrust.webapp.transactionservice.repos.LoanTransactionRepository;
+import com.beardtrust.webapp.transactionservice.entities.*;
+import com.beardtrust.webapp.transactionservice.exceptions.IncorrectTransactionSpecializationException;
+import com.beardtrust.webapp.transactionservice.models.NewTransactionModel;
+import com.beardtrust.webapp.transactionservice.models.TransactionSpecialization;
+import com.beardtrust.webapp.transactionservice.repos.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * This class provides the implementation of the Transaction Service.
@@ -31,9 +33,11 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private final AccountTransactionRepository accountTransactionRepository;
 	private final CardTransactionRepository cardTransactionRepository;
+	private final FinancialAssetRepository financialAssetRepository;
 	private final FinancialTransactionRepository financialTransactionRepository;
 	private final LoanTransactionRepository loanTransactionRepository;
-	private final ModelMapper modelMapper;
+	private final TransactionStatusRepository transactionStatusRepository;
+	private final TransactionTypeRepository transactionTypeRepository;
 
 	/**
 	 * This method accesses each transaction repository to check the application's
@@ -76,6 +80,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public Page<FinancialTransactionDTO> getAllTransactions(Pageable page) {
 		log.trace("Start of TransactionService.getAllTransactions(" + page + ")");
 
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
 		Page<FinancialTransactionDTO> financialTransactions = null;
 
 		try {
@@ -105,6 +112,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public Page<FinancialTransactionDTO> getAccountTransactions(Pageable page) {
 		log.trace("End of TransactionService.getAccountTransactions(" + page + ")");
 
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
 		Page<FinancialTransactionDTO> accountTransactions = null;
 
 		try {
@@ -132,6 +142,9 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public Page<FinancialTransactionDTO> getCardTransactions(Pageable page) {
 		log.trace("End of TransactionService.getCardTransactions(" + page + ")");
+
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
 		Page<FinancialTransactionDTO> cardTransactions = null;
 
@@ -161,6 +174,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public Page<FinancialTransactionDTO> getLoanTransactions(Pageable page) {
 		log.trace("Start of TransactionService.getLoanTransactions(" + page + ")");
 
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
 		Page<FinancialTransactionDTO> loanTransactions = null;
 
 		try {
@@ -175,5 +191,184 @@ public class TransactionServiceImpl implements TransactionService {
 
 		log.trace("End of TransactionService.getLoanTransactions(" + page + ")");
 		return loanTransactions;
+	}
+
+	/**
+	 * This method takes a NewTransactionModel object, creates the specified transaction,
+	 * and saves the transaction to the database.
+	 *
+	 * @param transaction NewTransactionModel object containing the transaction details
+	 * @return FinancialTransactionDTO object for the created transaction
+	 */
+	@Override
+	public FinancialTransactionDTO createTransaction(NewTransactionModel transaction) {
+		log.trace("Start of TransactionService.createTransaction(<redacted transaction details>)");
+
+		FinancialTransactionDTO result = null;
+		try {
+			switch (transaction.getTransactionSpecialization()) {
+				case ACCOUNT:
+					log.debug("Calling TransactionService.createAccountTransaction(<redacted transaction details>)");
+					result = createAccountTransaction(transaction);
+					break;
+				case CARD:
+					log.debug("Calling TransactionService.createCardTransaction(<redacted transaction details>)");
+					result = createCardTransaction(transaction);
+					break;
+				case LOAN:
+					log.debug("Calling TransactionService.createLoanTransaction(<redacted transaction details>)");
+					result = createLoanTransaction(transaction);
+					break;
+			}
+		} catch (Exception e) {
+			log.warn(e.getMessage());
+		}
+
+		log.trace("End of TransactionService.createTransaction(<redacted transaction details>)");
+
+		return result;
+	}
+
+	/**
+	 * This method takes a NewTransactionModel object with the desired transaction details
+	 * and returns a FinancialTransactionDTO object for the new account transaction.
+	 *
+	 * @param transaction NewTransactionModel object containing the transaction details
+	 * @return FinancialTransactionDTO object for the created transaction
+	 */
+	private FinancialTransactionDTO createAccountTransaction(NewTransactionModel transaction) throws IncorrectTransactionSpecializationException {
+		log.trace("Start of TransactionService.createAccountTransaction(<redacted transaction details>)");
+		if (transaction.getTransactionSpecialization() != TransactionSpecialization.ACCOUNT) {
+			throw new IncorrectTransactionSpecializationException("Unable to create AccountTransaction from " +
+					"NewTransactionModel with " + transaction.getTransactionSpecialization().toString() +
+					" specialization");
+		}
+
+		FinancialTransactionDTO result = null;
+
+		try {
+			ModelMapper modelMapper = new ModelMapper();
+			modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+			Optional<FinancialAsset> source = financialAssetRepository.findById(transaction.getSourceId());
+			Optional<FinancialAsset> target = financialAssetRepository.findById(transaction.getTargetId());
+			Optional<TransactionStatus> transactionStatus =
+					transactionStatusRepository.findByStatusName(transaction.getTransactionStatusName());
+			Optional<TransactionType> transactionType = transactionTypeRepository.findByTypeName(transaction.getTransactionTypeName());
+
+			AccountTransaction newTransaction = new AccountTransaction();
+
+			newTransaction.setId(UUID.randomUUID().toString());
+			newTransaction.setStatusTime(LocalDateTime.now());
+			newTransaction.setSource(source.orElse(null));
+			newTransaction.setTarget(target.orElse(null));
+			newTransaction.setTransactionStatus(transactionStatus.orElse(null));
+			newTransaction.setTransactionType(transactionType.orElse(null));
+			newTransaction.setTransactionAmount(transaction.getAmount());
+			newTransaction.setNotes(transaction.getNotes());
+
+			result = modelMapper.map(accountTransactionRepository.save(newTransaction), FinancialTransactionDTO.class);
+		} catch (Exception e) {
+			log.warn(e.getMessage());
+		}
+
+		log.trace("End of TransactionService.createAccountTransaction(<redacted transaction details>)");
+
+		return result;
+	}
+
+	/**
+	 * This method takes a NewTransactionModel object with the desired transaction details
+	 * and returns a FinancialTransactionDTO object for the new card transaction.
+	 *
+	 * @param transaction NewTransactionModel object containing the transaction details
+	 * @return FinancialTransactionDTO object for the created transaction
+	 */
+	private FinancialTransactionDTO createCardTransaction(NewTransactionModel transaction) throws IncorrectTransactionSpecializationException {
+		log.trace("Start of TransactionService.createCardTransaction(<redacted transaction details>)");
+		if (transaction.getTransactionSpecialization() != TransactionSpecialization.CARD) {
+			throw new IncorrectTransactionSpecializationException("Unable to create CardTransaction from " +
+					"NewTransactionModel with " + transaction.getTransactionSpecialization().toString() +
+					" specialization");
+		}
+		FinancialTransactionDTO result = null;
+
+		try {
+			ModelMapper modelMapper = new ModelMapper();
+			modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+			Optional<FinancialAsset> source = financialAssetRepository.findById(transaction.getSourceId());
+			Optional<FinancialAsset> target = financialAssetRepository.findById(transaction.getTargetId());
+			Optional<TransactionStatus> transactionStatus =
+					transactionStatusRepository.findByStatusName(transaction.getTransactionStatusName());
+			Optional<TransactionType> transactionType = transactionTypeRepository.findByTypeName(transaction.getTransactionTypeName());
+
+			CardTransaction newTransaction = new CardTransaction();
+
+			newTransaction.setId(UUID.randomUUID().toString());
+			newTransaction.setStatusTime(LocalDateTime.now());
+			newTransaction.setSource(source.orElse(null));
+			newTransaction.setTarget(target.orElse(null));
+			newTransaction.setTransactionStatus(transactionStatus.orElse(null));
+			newTransaction.setTransactionType(transactionType.orElse(null));
+			newTransaction.setTransactionAmount(transaction.getAmount());
+			newTransaction.setNotes(transaction.getNotes());
+
+			result = modelMapper.map(cardTransactionRepository.save(newTransaction), FinancialTransactionDTO.class);
+		} catch (Exception e) {
+			log.warn(e.getMessage());
+		}
+
+		log.trace("End of TransactionService.createCardTransaction(<redacted transaction details>)");
+
+		return result;
+	}
+
+	/**
+	 * This method takes a NewTransactionModel object with the desired transaction details
+	 * and returns a FinancialTransactionDTO object for the new loan transaction.
+	 *
+	 * @param transaction NewTransactionModel object containing the transaction details
+	 * @return FinancialTransactionDTO object for the created transaction
+	 */
+	private FinancialTransactionDTO createLoanTransaction(NewTransactionModel transaction) throws IncorrectTransactionSpecializationException {
+		log.trace("Start of TransactionService.createCardTransaction(<redacted transaction details>)");
+
+		if (transaction.getTransactionSpecialization() != TransactionSpecialization.LOAN) {
+			throw new IncorrectTransactionSpecializationException("Unable to create LoanTransaction from " +
+					"NewTransactionModel with " + transaction.getTransactionSpecialization().toString() +
+					" specialization");
+		}
+		FinancialTransactionDTO result = null;
+
+		try {
+			ModelMapper modelMapper = new ModelMapper();
+			modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+			Optional<FinancialAsset> source = financialAssetRepository.findById(transaction.getSourceId());
+			Optional<FinancialAsset> target = financialAssetRepository.findById(transaction.getTargetId());
+			Optional<TransactionStatus> transactionStatus =
+					transactionStatusRepository.findByStatusName(transaction.getTransactionStatusName());
+			Optional<TransactionType> transactionType = transactionTypeRepository.findByTypeName(transaction.getTransactionTypeName());
+
+			LoanTransaction newTransaction = new LoanTransaction();
+
+			newTransaction.setId(UUID.randomUUID().toString());
+			newTransaction.setStatusTime(LocalDateTime.now());
+			newTransaction.setSource(source.orElse(null));
+			newTransaction.setTarget(target.orElse(null));
+			newTransaction.setTransactionStatus(transactionStatus.orElse(null));
+			newTransaction.setTransactionType(transactionType.orElse(null));
+			newTransaction.setTransactionAmount(transaction.getAmount());
+			newTransaction.setNotes(transaction.getNotes());
+
+			result = modelMapper.map(loanTransactionRepository.save(newTransaction), FinancialTransactionDTO.class);
+		} catch (Exception e) {
+			log.warn(e.getMessage());
+		}
+
+		log.trace("End of TransactionService.createLoanTransaction(<redacted transaction details>)");
+
+		return result;
 	}
 }

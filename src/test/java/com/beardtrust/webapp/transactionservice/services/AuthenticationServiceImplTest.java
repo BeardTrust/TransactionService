@@ -55,7 +55,7 @@ class AuthenticationServiceImplTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 		when(this.userRepository.findByEmail((String) any())).thenReturn(userEntity);

@@ -46,7 +46,7 @@ class CardEntityTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -87,7 +87,7 @@ class CardEntityTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -128,7 +128,7 @@ class CardEntityTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -171,7 +171,7 @@ class CardEntityTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -208,7 +208,7 @@ class CardEntityTest {
 		userEntity1.setRole("Role");
 		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity1.setUsername("janedoe");
-		userEntity1.setId("42");
+		userEntity1.setUserId("42");
 		userEntity1.setPhone("4105551212");
 		userEntity1.setFirstName("Jane");
 
@@ -249,7 +249,7 @@ class CardEntityTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -286,7 +286,7 @@ class CardEntityTest {
 		userEntity1.setRole("Role");
 		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity1.setUsername("janedoe");
-		userEntity1.setId("42");
+		userEntity1.setUserId("42");
 		userEntity1.setPhone("4105551212");
 		userEntity1.setFirstName("Jane");
 
@@ -327,7 +327,7 @@ class CardEntityTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -364,7 +364,7 @@ class CardEntityTest {
 		userEntity1.setRole("Role");
 		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity1.setUsername("janedoe");
-		userEntity1.setId("42");
+		userEntity1.setUserId("42");
 		userEntity1.setPhone("4105551212");
 		userEntity1.setFirstName("Jane");
 
@@ -405,7 +405,7 @@ class CardEntityTest {
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity.setUsername("janedoe");
-		userEntity.setId("42");
+		userEntity.setUserId("42");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -442,7 +442,7 @@ class CardEntityTest {
 		userEntity1.setRole("Role");
 		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
 		userEntity1.setUsername("janedoe");
-		userEntity1.setId("42");
+		userEntity1.setUserId("42");
 		userEntity1.setPhone("4105551212");
 		userEntity1.setFirstName("Jane");
 
