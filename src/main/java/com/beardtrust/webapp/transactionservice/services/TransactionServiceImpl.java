@@ -3,8 +3,10 @@ package com.beardtrust.webapp.transactionservice.services;
 import com.beardtrust.webapp.transactionservice.dtos.FinancialTransactionDTO;
 import com.beardtrust.webapp.transactionservice.entities.*;
 import com.beardtrust.webapp.transactionservice.exceptions.IncorrectTransactionSpecializationException;
+import com.beardtrust.webapp.transactionservice.exceptions.TransactionNotFoundException;
 import com.beardtrust.webapp.transactionservice.models.NewTransactionModel;
 import com.beardtrust.webapp.transactionservice.models.TransactionSpecialization;
+import com.beardtrust.webapp.transactionservice.models.UpdateTransactionModel;
 import com.beardtrust.webapp.transactionservice.repos.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -226,6 +228,47 @@ public class TransactionServiceImpl implements TransactionService {
 
 		log.trace("End of TransactionService.createTransaction(<redacted transaction details>)");
 
+		return result;
+	}
+
+	/**
+	 * This method takes an UpdateTransactionModel object and attempts to update
+	 * the specified transaction's notes, status, and status time.  It throws a
+	 * TransactionNotFoundException if the specified transaction cannot be located
+	 * in the database.
+	 *
+	 * @param transaction UpdateTransactionModel the entity containing updated data
+	 * @return FinancialTransactionDTO the DTO for the updated transaction
+	 */
+	@Override
+	public FinancialTransactionDTO updateTransaction(UpdateTransactionModel transaction) {
+		log.trace("Start of TransactionService.updateTransaction(<redacted transaction details>)");
+
+		FinancialTransactionDTO result = null;
+
+		try {
+			ModelMapper modelMapper = new ModelMapper();
+			modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+			Optional<FinancialTransaction> updatedTransaction =
+					financialTransactionRepository.findById(transaction.getTransactionId());
+			Optional<TransactionStatus> transactionStatus =
+					transactionStatusRepository.findByStatusName(transaction.getTransactionStatusName());
+
+			if(updatedTransaction.isPresent() && transactionStatus.isPresent()){
+				updatedTransaction.get().setTransactionStatus(transactionStatus.get());
+				updatedTransaction.get().setNotes(transaction.getNotes());
+				updatedTransaction.get().setStatusTime(LocalDateTime.now());
+				result = modelMapper.map(financialTransactionRepository.save(updatedTransaction.get()),
+						FinancialTransactionDTO.class);
+			} else {
+				throw new TransactionNotFoundException("Transaction update failed; transaction not found");
+			}
+		} catch (Exception e) {
+			log.warn(e.getMessage());
+		}
+
+		log.trace("End of TransactionService.updateTransaction(<redacted transaction details>)");
 		return result;
 	}
 

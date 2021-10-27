@@ -2,6 +2,7 @@ package com.beardtrust.webapp.transactionservice.controllers;
 
 import com.beardtrust.webapp.transactionservice.dtos.FinancialTransactionDTO;
 import com.beardtrust.webapp.transactionservice.models.NewTransactionModel;
+import com.beardtrust.webapp.transactionservice.models.UpdateTransactionModel;
 import com.beardtrust.webapp.transactionservice.services.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -138,12 +139,23 @@ public class TransactionController {
 
 		log.info("Transaction Model: " + transaction.toString());
 
-		ResponseEntity<FinancialTransactionDTO> response = null;
+		ResponseEntity<FinancialTransactionDTO> response;
 		response = new ResponseEntity<>(transactionService.createTransaction(transaction), HttpStatus.CREATED);
 
 
 		log.trace("End of TransactionController.createTransaction(<redacted transaction details>)");
 
+		return response;
+	}
+
+	@PutMapping(path = "/transactions")
+	public ResponseEntity<FinancialTransactionDTO> updateTransaction(@RequestBody() UpdateTransactionModel transaction){
+		log.trace("Start of TransactionController.updateTransaction(<redacted transaction details>)");
+
+		ResponseEntity<FinancialTransactionDTO> response;
+		response = new ResponseEntity<>(transactionService.updateTransaction(transaction), HttpStatus.PARTIAL_CONTENT);
+
+		log.trace("End of TransactionController.updateTransaction(<redacted transaction details>)");
 		return response;
 	}
 }
