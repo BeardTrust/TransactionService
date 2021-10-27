@@ -34,7 +34,6 @@ public class TransactionController {
 	 *
 	 * @return a ResponseEntity<String> with HttpStatus.OK
 	 */
-	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/health")
 	public ResponseEntity<String> checkHealth() {
 		String status = transactionService.checkHealth();
@@ -56,7 +55,7 @@ public class TransactionController {
 	 * @param page a Pageable object to request a page of transactions
 	 * @return a Page<FinancialTransaction> object
 	 */
-	@PreAuthorize("hasAuthority('admin')")
+//	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getAllTransactions(Pageable page) {
 		log.trace("Start of TransactionController.getAllTransactions(" + page + ")");
@@ -77,7 +76,7 @@ public class TransactionController {
 	 * @param page a Pageable object to request a page of transactions
 	 * @return a Page<AccountTransaction> object
 	 */
-	@PreAuthorize("hasAuthority('admin')")
+//	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/account")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getAccountTransactions(Pageable page) {
 		log.trace("Start of TransactionController.getAccountTransactions(" + page + ")");
@@ -98,7 +97,7 @@ public class TransactionController {
 	 * @param page a Pageable object to request a page of transactions
 	 * @return a Page<CardTransaction> object
 	 */
-	@PreAuthorize("hasAuthority('admin')")
+//	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/card")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getCardTransactions(Pageable page) {
 		log.trace("Start of TransactionController.getCardTransactions(" + page + ")");
@@ -119,7 +118,7 @@ public class TransactionController {
 	 * @param page a Pageable object to request a page of transactions
 	 * @return a Page<LoanTransaction> object
 	 */
-	@PreAuthorize("hasAuthority('admin')")
+//	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/loan")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getLoanTransactions(Pageable page) {
 		log.trace("Start of TransactionController.getLoanTransactions(" + page + ")");
@@ -132,7 +131,7 @@ public class TransactionController {
 		return response;
 	}
 
-	//	@PreAuthorize("hasAuthority('admin')")
+//	@PreAuthorize("hasAuthority('admin')")
 	@PostMapping(path = "/transactions")
 	public ResponseEntity<FinancialTransactionDTO> createTransaction(@RequestBody() NewTransactionModel transaction) {
 		log.trace("Start of TransactionController.createTransaction(<redacted transaction details>)");
@@ -148,12 +147,13 @@ public class TransactionController {
 		return response;
 	}
 
+//	@PreAuthorize("hasAuthority('admin')")
 	@PutMapping(path = "/transactions")
 	public ResponseEntity<FinancialTransactionDTO> updateTransaction(@RequestBody() UpdateTransactionModel transaction){
 		log.trace("Start of TransactionController.updateTransaction(<redacted transaction details>)");
 
 		ResponseEntity<FinancialTransactionDTO> response;
-		response = new ResponseEntity<>(transactionService.updateTransaction(transaction), HttpStatus.PARTIAL_CONTENT);
+		response = new ResponseEntity<>(transactionService.updateTransaction(transaction), HttpStatus.OK);
 
 		log.trace("End of TransactionController.updateTransaction(<redacted transaction details>)");
 		return response;
