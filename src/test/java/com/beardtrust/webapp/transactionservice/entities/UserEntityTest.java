@@ -18,20 +18,20 @@ class UserEntityTest {
 		actualUserEntity.setDateOfBirth(ofEpochDayResult);
 		actualUserEntity.setEmail("jane.doe@example.org");
 		actualUserEntity.setFirstName("Jane");
-		actualUserEntity.setUserId("42");
 		actualUserEntity.setLastName("Doe");
 		actualUserEntity.setPassword("iloveyou");
 		actualUserEntity.setPhone("4105551212");
 		actualUserEntity.setRole("Role");
+		actualUserEntity.setUserId("42");
 		actualUserEntity.setUsername("janedoe");
 		assertSame(ofEpochDayResult, actualUserEntity.getDateOfBirth());
 		assertEquals("jane.doe@example.org", actualUserEntity.getEmail());
 		assertEquals("Jane", actualUserEntity.getFirstName());
-		assertEquals("42", actualUserEntity.getUserId());
 		assertEquals("Doe", actualUserEntity.getLastName());
 		assertEquals("iloveyou", actualUserEntity.getPassword());
 		assertEquals("4105551212", actualUserEntity.getPhone());
 		assertEquals("Role", actualUserEntity.getRole());
+		assertEquals("42", actualUserEntity.getUserId());
 		assertEquals("janedoe", actualUserEntity.getUsername());
 		assertEquals(
 				"UserEntity{userId='42', username='janedoe', password='iloveyou', email='jane.doe@example.org',"
@@ -60,115 +60,11 @@ class UserEntityTest {
 		userEntity.setEmail("jane.doe@example.org");
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
 		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 		assertFalse(userEntity.equals(null));
-	}
-
-	@Test
-	void testEquals10() {
-		UserEntity userEntity = new UserEntity();
-		userEntity.setLastName("Doe");
-		userEntity.setPassword("iloveyou");
-		userEntity.setEmail("jane.doe@example.org");
-		userEntity.setRole("Role");
-		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername(null);
-		userEntity.setUserId("42");
-		userEntity.setPhone("4105551212");
-		userEntity.setFirstName("Jane");
-
-		UserEntity userEntity1 = new UserEntity();
-		userEntity1.setLastName("Doe");
-		userEntity1.setPassword("iloveyou");
-		userEntity1.setEmail("jane.doe@example.org");
-		userEntity1.setRole("Role");
-		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity1.setUsername("janedoe");
-		userEntity1.setUserId("42");
-		userEntity1.setPhone("4105551212");
-		userEntity1.setFirstName("Jane");
-		assertFalse(userEntity.equals(userEntity1));
-	}
-
-	@Test
-	void testEquals11() {
-		UserEntity userEntity = new UserEntity();
-		userEntity.setLastName("Doe");
-		userEntity.setPassword("iloveyou");
-		userEntity.setEmail("jane.doe@example.org");
-		userEntity.setRole("Role");
-		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
-		userEntity.setUserId(null);
-		userEntity.setPhone("4105551212");
-		userEntity.setFirstName("Jane");
-
-		UserEntity userEntity1 = new UserEntity();
-		userEntity1.setLastName("Doe");
-		userEntity1.setPassword("iloveyou");
-		userEntity1.setEmail("jane.doe@example.org");
-		userEntity1.setRole("Role");
-		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity1.setUsername("janedoe");
-		userEntity1.setUserId("42");
-		userEntity1.setPhone("4105551212");
-		userEntity1.setFirstName("Jane");
-		assertFalse(userEntity.equals(userEntity1));
-	}
-
-	@Test
-	void testEquals12() {
-		UserEntity userEntity = new UserEntity();
-		userEntity.setLastName("Doe");
-		userEntity.setPassword("iloveyou");
-		userEntity.setEmail("jane.doe@example.org");
-		userEntity.setRole("Role");
-		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
-		userEntity.setUserId("42");
-		userEntity.setPhone("+44 1865 4960636");
-		userEntity.setFirstName("Jane");
-
-		UserEntity userEntity1 = new UserEntity();
-		userEntity1.setLastName("Doe");
-		userEntity1.setPassword("iloveyou");
-		userEntity1.setEmail("jane.doe@example.org");
-		userEntity1.setRole("Role");
-		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity1.setUsername("janedoe");
-		userEntity1.setUserId("42");
-		userEntity1.setPhone("4105551212");
-		userEntity1.setFirstName("Jane");
-		assertFalse(userEntity.equals(userEntity1));
-	}
-
-	@Test
-	void testEquals13() {
-		UserEntity userEntity = new UserEntity();
-		userEntity.setLastName("Doe");
-		userEntity.setPassword("iloveyou");
-		userEntity.setEmail("jane.doe@example.org");
-		userEntity.setRole("Role");
-		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
-		userEntity.setUserId("42");
-		userEntity.setPhone("4105551212");
-		userEntity.setFirstName(null);
-
-		UserEntity userEntity1 = new UserEntity();
-		userEntity1.setLastName("Doe");
-		userEntity1.setPassword("iloveyou");
-		userEntity1.setEmail("jane.doe@example.org");
-		userEntity1.setRole("Role");
-		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity1.setUsername("janedoe");
-		userEntity1.setUserId("42");
-		userEntity1.setPhone("4105551212");
-		userEntity1.setFirstName("Jane");
-		assertFalse(userEntity.equals(userEntity1));
 	}
 
 	@Test
@@ -179,8 +75,8 @@ class UserEntityTest {
 		userEntity.setEmail("jane.doe@example.org");
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
 		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 		assertFalse(userEntity.equals("Different type to UserEntity"));
@@ -194,8 +90,8 @@ class UserEntityTest {
 		userEntity.setEmail("jane.doe@example.org");
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
 		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 		assertTrue(userEntity.equals(userEntity));
@@ -211,8 +107,8 @@ class UserEntityTest {
 		userEntity.setEmail("jane.doe@example.org");
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
 		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -222,8 +118,8 @@ class UserEntityTest {
 		userEntity1.setEmail("jane.doe@example.org");
 		userEntity1.setRole("Role");
 		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity1.setUsername("janedoe");
 		userEntity1.setUserId("42");
+		userEntity1.setUsername("janedoe");
 		userEntity1.setPhone("4105551212");
 		userEntity1.setFirstName("Jane");
 		assertTrue(userEntity.equals(userEntity1));
@@ -239,8 +135,8 @@ class UserEntityTest {
 		userEntity.setEmail("jane.doe@example.org");
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
 		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -250,8 +146,8 @@ class UserEntityTest {
 		userEntity1.setEmail("jane.doe@example.org");
 		userEntity1.setRole("Role");
 		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity1.setUsername("janedoe");
 		userEntity1.setUserId("42");
+		userEntity1.setUsername("janedoe");
 		userEntity1.setPhone("4105551212");
 		userEntity1.setFirstName("Jane");
 		assertFalse(userEntity.equals(userEntity1));
@@ -265,8 +161,8 @@ class UserEntityTest {
 		userEntity.setEmail("jane.doe@example.org");
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
 		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -276,8 +172,8 @@ class UserEntityTest {
 		userEntity1.setEmail("jane.doe@example.org");
 		userEntity1.setRole("Role");
 		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity1.setUsername("janedoe");
 		userEntity1.setUserId("42");
+		userEntity1.setUsername("janedoe");
 		userEntity1.setPhone("4105551212");
 		userEntity1.setFirstName("Jane");
 		assertFalse(userEntity.equals(userEntity1));
@@ -291,8 +187,8 @@ class UserEntityTest {
 		userEntity.setEmail(null);
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
 		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -302,8 +198,8 @@ class UserEntityTest {
 		userEntity1.setEmail("jane.doe@example.org");
 		userEntity1.setRole("Role");
 		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity1.setUsername("janedoe");
 		userEntity1.setUserId("42");
+		userEntity1.setUsername("janedoe");
 		userEntity1.setPhone("4105551212");
 		userEntity1.setFirstName("Jane");
 		assertFalse(userEntity.equals(userEntity1));
@@ -317,8 +213,8 @@ class UserEntityTest {
 		userEntity.setEmail("jane.doe@example.org");
 		userEntity.setRole(null);
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
 		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -328,8 +224,8 @@ class UserEntityTest {
 		userEntity1.setEmail("jane.doe@example.org");
 		userEntity1.setRole("Role");
 		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity1.setUsername("janedoe");
 		userEntity1.setUserId("42");
+		userEntity1.setUsername("janedoe");
 		userEntity1.setPhone("4105551212");
 		userEntity1.setFirstName("Jane");
 		assertFalse(userEntity.equals(userEntity1));
@@ -343,8 +239,8 @@ class UserEntityTest {
 		userEntity.setEmail("jane.doe@example.org");
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(0L));
-		userEntity.setUsername("janedoe");
 		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -354,8 +250,112 @@ class UserEntityTest {
 		userEntity1.setEmail("jane.doe@example.org");
 		userEntity1.setRole("Role");
 		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity1.setUsername("janedoe");
 		userEntity1.setUserId("42");
+		userEntity1.setUsername("janedoe");
+		userEntity1.setPhone("4105551212");
+		userEntity1.setFirstName("Jane");
+		assertFalse(userEntity.equals(userEntity1));
+	}
+
+	@Test
+	void testEquals10() {
+		UserEntity userEntity = new UserEntity();
+		userEntity.setLastName("Doe");
+		userEntity.setPassword("iloveyou");
+		userEntity.setEmail("jane.doe@example.org");
+		userEntity.setRole("Role");
+		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
+		userEntity.setUserId(null);
+		userEntity.setUsername("janedoe");
+		userEntity.setPhone("4105551212");
+		userEntity.setFirstName("Jane");
+
+		UserEntity userEntity1 = new UserEntity();
+		userEntity1.setLastName("Doe");
+		userEntity1.setPassword("iloveyou");
+		userEntity1.setEmail("jane.doe@example.org");
+		userEntity1.setRole("Role");
+		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
+		userEntity1.setUserId("42");
+		userEntity1.setUsername("janedoe");
+		userEntity1.setPhone("4105551212");
+		userEntity1.setFirstName("Jane");
+		assertFalse(userEntity.equals(userEntity1));
+	}
+
+	@Test
+	void testEquals11() {
+		UserEntity userEntity = new UserEntity();
+		userEntity.setLastName("Doe");
+		userEntity.setPassword("iloveyou");
+		userEntity.setEmail("jane.doe@example.org");
+		userEntity.setRole("Role");
+		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
+		userEntity.setUserId("42");
+		userEntity.setUsername(null);
+		userEntity.setPhone("4105551212");
+		userEntity.setFirstName("Jane");
+
+		UserEntity userEntity1 = new UserEntity();
+		userEntity1.setLastName("Doe");
+		userEntity1.setPassword("iloveyou");
+		userEntity1.setEmail("jane.doe@example.org");
+		userEntity1.setRole("Role");
+		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
+		userEntity1.setUserId("42");
+		userEntity1.setUsername("janedoe");
+		userEntity1.setPhone("4105551212");
+		userEntity1.setFirstName("Jane");
+		assertFalse(userEntity.equals(userEntity1));
+	}
+
+	@Test
+	void testEquals12() {
+		UserEntity userEntity = new UserEntity();
+		userEntity.setLastName("Doe");
+		userEntity.setPassword("iloveyou");
+		userEntity.setEmail("jane.doe@example.org");
+		userEntity.setRole("Role");
+		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
+		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
+		userEntity.setPhone("+44 1865 4960636");
+		userEntity.setFirstName("Jane");
+
+		UserEntity userEntity1 = new UserEntity();
+		userEntity1.setLastName("Doe");
+		userEntity1.setPassword("iloveyou");
+		userEntity1.setEmail("jane.doe@example.org");
+		userEntity1.setRole("Role");
+		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
+		userEntity1.setUserId("42");
+		userEntity1.setUsername("janedoe");
+		userEntity1.setPhone("4105551212");
+		userEntity1.setFirstName("Jane");
+		assertFalse(userEntity.equals(userEntity1));
+	}
+
+	@Test
+	void testEquals13() {
+		UserEntity userEntity = new UserEntity();
+		userEntity.setLastName("Doe");
+		userEntity.setPassword("iloveyou");
+		userEntity.setEmail("jane.doe@example.org");
+		userEntity.setRole("Role");
+		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
+		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
+		userEntity.setPhone("4105551212");
+		userEntity.setFirstName(null);
+
+		UserEntity userEntity1 = new UserEntity();
+		userEntity1.setLastName("Doe");
+		userEntity1.setPassword("iloveyou");
+		userEntity1.setEmail("jane.doe@example.org");
+		userEntity1.setRole("Role");
+		userEntity1.setDateOfBirth(LocalDate.ofEpochDay(1L));
+		userEntity1.setUserId("42");
+		userEntity1.setUsername("janedoe");
 		userEntity1.setPhone("4105551212");
 		userEntity1.setFirstName("Jane");
 		assertFalse(userEntity.equals(userEntity1));

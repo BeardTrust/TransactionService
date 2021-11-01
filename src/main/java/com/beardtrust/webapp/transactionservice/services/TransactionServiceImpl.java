@@ -272,6 +272,19 @@ public class TransactionServiceImpl implements TransactionService {
 		return result;
 	}
 
+	@Override
+	public Page<FinancialTransactionDTO> getTransactionsByAssetId(String assetId, String search, Pageable page) {
+		log.trace("Start of TransactionService.getTransactionsByAssetId(<redacted request information>)");
+
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+		log.trace("End of TransactionService.getTransactionsByAssetId(<redacted request information>)");
+
+		return financialTransactionRepository.findAllBySource_IdOrTarget_IdIs(assetId, assetId, page).map((transaction) ->
+				modelMapper.map(transaction, FinancialTransactionDTO.class));
+	}
+
 	/**
 	 * This method takes a NewTransactionModel object with the desired transaction details
 	 * and returns a FinancialTransactionDTO object for the new account transaction.

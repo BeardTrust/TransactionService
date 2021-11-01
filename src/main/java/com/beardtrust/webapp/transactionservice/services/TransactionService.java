@@ -49,4 +49,6 @@ public interface TransactionService {
 	FinancialTransactionDTO createTransaction(NewTransactionModel transaction);
 
 	FinancialTransactionDTO updateTransaction(UpdateTransactionModel transaction);
+
+	Page<FinancialTransactionDTO> getTransactionsByAssetId(String assetId, String search, Pageable page);
 }

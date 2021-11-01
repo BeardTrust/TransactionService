@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().authorizeRequests()
 				.antMatchers("/swagger-ui/**").permitAll()
 				.antMatchers("/transactions", HttpMethod.POST).permitAll()
+				.anyRequest().permitAll()
 				.and()
 				.addFilter(new AuthorizationFilter(authenticationManager(), environment, authorizationService));
 		http.headers().frameOptions().disable();

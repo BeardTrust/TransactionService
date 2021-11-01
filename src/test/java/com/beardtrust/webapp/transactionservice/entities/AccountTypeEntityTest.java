@@ -63,50 +63,6 @@ class AccountTypeEntityTest {
 	}
 
 	@Test
-	void testEquals10() {
-		AccountTypeEntity accountTypeEntity = new AccountTypeEntity();
-		accountTypeEntity.setCreatedDate(LocalDateTime.of(1, 1, 1, 1, 1));
-		accountTypeEntity.setExpireDate(LocalDateTime.of(1, 1, 1, 1, 1));
-		accountTypeEntity.setId("42");
-		accountTypeEntity.setAccounts(new HashSet<AccountEntity>());
-		accountTypeEntity.setName("Name");
-		accountTypeEntity.setActive(false);
-		accountTypeEntity.setDescription("The characteristics of someone or something");
-
-		AccountTypeEntity accountTypeEntity1 = new AccountTypeEntity();
-		accountTypeEntity1.setCreatedDate(LocalDateTime.of(1, 1, 1, 1, 1));
-		accountTypeEntity1.setExpireDate(LocalDateTime.of(1, 1, 1, 1, 1));
-		accountTypeEntity1.setId("42");
-		accountTypeEntity1.setAccounts(new HashSet<AccountEntity>());
-		accountTypeEntity1.setName("Name");
-		accountTypeEntity1.setActive(true);
-		accountTypeEntity1.setDescription("The characteristics of someone or something");
-		assertFalse(accountTypeEntity.equals(accountTypeEntity1));
-	}
-
-	@Test
-	void testEquals11() {
-		AccountTypeEntity accountTypeEntity = new AccountTypeEntity();
-		accountTypeEntity.setCreatedDate(LocalDateTime.of(1, 1, 1, 1, 1));
-		accountTypeEntity.setExpireDate(LocalDateTime.of(1, 1, 1, 1, 1));
-		accountTypeEntity.setId("42");
-		accountTypeEntity.setAccounts(new HashSet<AccountEntity>());
-		accountTypeEntity.setName("Name");
-		accountTypeEntity.setActive(true);
-		accountTypeEntity.setDescription(null);
-
-		AccountTypeEntity accountTypeEntity1 = new AccountTypeEntity();
-		accountTypeEntity1.setCreatedDate(LocalDateTime.of(1, 1, 1, 1, 1));
-		accountTypeEntity1.setExpireDate(LocalDateTime.of(1, 1, 1, 1, 1));
-		accountTypeEntity1.setId("42");
-		accountTypeEntity1.setAccounts(new HashSet<AccountEntity>());
-		accountTypeEntity1.setName("Name");
-		accountTypeEntity1.setActive(true);
-		accountTypeEntity1.setDescription("The characteristics of someone or something");
-		assertFalse(accountTypeEntity.equals(accountTypeEntity1));
-	}
-
-	@Test
 	void testEquals2() {
 		AccountTypeEntity accountTypeEntity = new AccountTypeEntity();
 		accountTypeEntity.setCreatedDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -232,8 +188,8 @@ class AccountTypeEntityTest {
 		userEntity.setEmail("jane.doe@example.org");
 		userEntity.setRole("Role");
 		userEntity.setDateOfBirth(LocalDate.ofEpochDay(1L));
-		userEntity.setUsername("janedoe");
 		userEntity.setUserId("42");
+		userEntity.setUsername("janedoe");
 		userEntity.setPhone("4105551212");
 		userEntity.setFirstName("Jane");
 
@@ -294,6 +250,50 @@ class AccountTypeEntityTest {
 		accountTypeEntity.setName(null);
 		accountTypeEntity.setActive(true);
 		accountTypeEntity.setDescription("The characteristics of someone or something");
+
+		AccountTypeEntity accountTypeEntity1 = new AccountTypeEntity();
+		accountTypeEntity1.setCreatedDate(LocalDateTime.of(1, 1, 1, 1, 1));
+		accountTypeEntity1.setExpireDate(LocalDateTime.of(1, 1, 1, 1, 1));
+		accountTypeEntity1.setId("42");
+		accountTypeEntity1.setAccounts(new HashSet<AccountEntity>());
+		accountTypeEntity1.setName("Name");
+		accountTypeEntity1.setActive(true);
+		accountTypeEntity1.setDescription("The characteristics of someone or something");
+		assertFalse(accountTypeEntity.equals(accountTypeEntity1));
+	}
+
+	@Test
+	void testEquals10() {
+		AccountTypeEntity accountTypeEntity = new AccountTypeEntity();
+		accountTypeEntity.setCreatedDate(LocalDateTime.of(1, 1, 1, 1, 1));
+		accountTypeEntity.setExpireDate(LocalDateTime.of(1, 1, 1, 1, 1));
+		accountTypeEntity.setId("42");
+		accountTypeEntity.setAccounts(new HashSet<AccountEntity>());
+		accountTypeEntity.setName("Name");
+		accountTypeEntity.setActive(false);
+		accountTypeEntity.setDescription("The characteristics of someone or something");
+
+		AccountTypeEntity accountTypeEntity1 = new AccountTypeEntity();
+		accountTypeEntity1.setCreatedDate(LocalDateTime.of(1, 1, 1, 1, 1));
+		accountTypeEntity1.setExpireDate(LocalDateTime.of(1, 1, 1, 1, 1));
+		accountTypeEntity1.setId("42");
+		accountTypeEntity1.setAccounts(new HashSet<AccountEntity>());
+		accountTypeEntity1.setName("Name");
+		accountTypeEntity1.setActive(true);
+		accountTypeEntity1.setDescription("The characteristics of someone or something");
+		assertFalse(accountTypeEntity.equals(accountTypeEntity1));
+	}
+
+	@Test
+	void testEquals11() {
+		AccountTypeEntity accountTypeEntity = new AccountTypeEntity();
+		accountTypeEntity.setCreatedDate(LocalDateTime.of(1, 1, 1, 1, 1));
+		accountTypeEntity.setExpireDate(LocalDateTime.of(1, 1, 1, 1, 1));
+		accountTypeEntity.setId("42");
+		accountTypeEntity.setAccounts(new HashSet<AccountEntity>());
+		accountTypeEntity.setName("Name");
+		accountTypeEntity.setActive(true);
+		accountTypeEntity.setDescription(null);
 
 		AccountTypeEntity accountTypeEntity1 = new AccountTypeEntity();
 		accountTypeEntity1.setCreatedDate(LocalDateTime.of(1, 1, 1, 1, 1));

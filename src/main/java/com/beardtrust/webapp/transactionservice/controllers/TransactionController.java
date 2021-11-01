@@ -9,9 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
 
 /**
  * This class represents the controller of the RESTful API for transactions.
@@ -68,6 +72,14 @@ public class TransactionController {
 
 		return response;
 	}
+
+//	@PreAuthorize(value = "permitAll()")
+//	@GetMapping(path = "/transactions/{assetId}")
+//	public ResponseEntity<Page<FinancialTransactionDTO>> getTransactionsByAsset(@PathVariable(name = "assetId")String assetId){
+//		ResponseEntity<Page<FinancialTransactionDTO>> results;
+//
+//		results = transactionService;
+//	}
 
 	/**
 	 * This method accepts an HTTP GET request on the /transactions/account
@@ -131,6 +143,16 @@ public class TransactionController {
 		return response;
 	}
 
+	@GetMapping(path = "/transactions/{id}")
+	public ResponseEntity<Page<FinancialTransactionDTO>> getTransactionsByAssetId(@PathVariable(name = "id")String assetId,
+																			@RequestParam(name = "search")String search,
+																				  Pageable page){
+		log.trace("Start of TransactionController.getTransactionsByAssetId(<redacted request data>)");
+
+		log.trace("End of TransactionController.getTransactionsByAssetId(<redacted request data>)");
+		return new ResponseEntity<>(transactionService.getTransactionsByAssetId(assetId, search, page), HttpStatus.OK);
+	}
+
 //	@PreAuthorize("hasAuthority('admin')")
 	@PostMapping(path = "/transactions")
 	public ResponseEntity<FinancialTransactionDTO> createTransaction(@RequestBody() NewTransactionModel transaction) {
@@ -149,6 +171,8 @@ public class TransactionController {
 
 //	@PreAuthorize("hasAuthority('admin')")
 	@PutMapping(path = "/transactions")
+	@Consumes({MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@Produces({MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<FinancialTransactionDTO> updateTransaction(@RequestBody() UpdateTransactionModel transaction){
 		log.trace("Start of TransactionController.updateTransaction(<redacted transaction details>)");
 
