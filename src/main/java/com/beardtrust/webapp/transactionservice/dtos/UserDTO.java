@@ -1,7 +1,6 @@
 package com.beardtrust.webapp.transactionservice.dtos;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -21,4 +20,18 @@ public class UserDTO {
 	private String lastName;
 	private LocalDate dateOfBirth;
 	private String role;
+
+	public UserDTO() {
+	}
+
+	public UserDTO(String userId, String username, String email, String phone, String firstName, String lastName, LocalDate dateOfBirth, String role) {
+		this.userId = userId;
+		this.username = username;
+		this.email = email;
+		this.phone = phone;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dateOfBirth = dateOfBirth;
+		this.role = role;
+	}
 }
