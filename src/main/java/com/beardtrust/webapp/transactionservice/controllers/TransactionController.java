@@ -145,10 +145,10 @@ public class TransactionController {
 
 	@GetMapping(path = "/transactions/{id}")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getTransactionsByAssetId(@PathVariable(name = "id")String assetId,
-																			@RequestParam(name = "search")String search,
+																			@RequestParam(name = "search", required = false)String search,
 																				  Pageable page){
 		log.trace("Start of TransactionController.getTransactionsByAssetId(<redacted request data>)");
-
+		log.warn("Search is: " + search);
 		log.trace("End of TransactionController.getTransactionsByAssetId(<redacted request data>)");
 		return new ResponseEntity<>(transactionService.getTransactionsByAssetId(assetId, search, page), HttpStatus.OK);
 	}
