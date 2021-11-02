@@ -75,5 +75,14 @@ class TransactionControllerTest {
 				.perform(requestBuilder);
 		actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
+
+	@Test
+	void testGetLoanTransactions() throws Exception {
+		SecurityMockMvcRequestBuilders.FormLoginRequestBuilder requestBuilder = SecurityMockMvcRequestBuilders.formLogin();
+		ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.transactionController)
+				.build()
+				.perform(requestBuilder);
+		actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
+	}
 }
 

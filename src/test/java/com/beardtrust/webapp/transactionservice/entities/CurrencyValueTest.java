@@ -17,6 +17,71 @@ class CurrencyValueTest {
 	}
 
 	@Test
+	void testConstructor2() {
+		CurrencyValue actualCurrencyValue = new CurrencyValue();
+		assertEquals(0, actualCurrencyValue.getCents());
+		assertEquals(0, actualCurrencyValue.getDollars());
+	}
+
+	@Test
+	void testConstructor3() {
+		CurrencyValue actualCurrencyValue = new CurrencyValue(1, 1);
+
+		assertEquals(1, actualCurrencyValue.getCents());
+		assertEquals(1, actualCurrencyValue.getDollars());
+	}
+
+	@Test
+	void testConstructor4() {
+		CurrencyValue actualCurrencyValue = new CurrencyValue(-99, 1);
+
+		assertEquals(1, actualCurrencyValue.getCents());
+		assertTrue(actualCurrencyValue.isNegative());
+		assertEquals(99, actualCurrencyValue.getDollars());
+	}
+
+	@Test
+	void testConstructor5() {
+		CurrencyValue actualCurrencyValue = new CurrencyValue(1, -99);
+
+		assertEquals(99, actualCurrencyValue.getCents());
+		assertTrue(actualCurrencyValue.isNegative());
+		assertEquals(1, actualCurrencyValue.getDollars());
+	}
+
+	@Test
+	void testConstructor6() {
+		CurrencyValue actualCurrencyValue = new CurrencyValue(1, Integer.MIN_VALUE);
+
+		assertEquals(48, actualCurrencyValue.getCents());
+		assertTrue(actualCurrencyValue.isNegative());
+		assertEquals(21474837, actualCurrencyValue.getDollars());
+	}
+
+	@Test
+	void testConstructor7() {
+		CurrencyValue actualCurrencyValue = new CurrencyValue(Integer.MIN_VALUE, Integer.MIN_VALUE);
+
+		assertEquals(52, actualCurrencyValue.getCents());
+		assertEquals(2126008811, actualCurrencyValue.getDollars());
+	}
+
+	@Test
+	void testConstructor8() {
+		CurrencyValue actualCurrencyValue = new CurrencyValue(1, 100);
+
+		assertEquals(0, actualCurrencyValue.getCents());
+		assertEquals(2, actualCurrencyValue.getDollars());
+	}
+
+	@Test
+	void testConstructor9() {
+		CurrencyValue actualCurrencyValue = new CurrencyValue(new CurrencyValue());
+		assertEquals(0, actualCurrencyValue.getCents());
+		assertEquals(0, actualCurrencyValue.getDollars());
+	}
+
+	@Test
 	void testConstructor10() {
 		CurrencyValue actualCurrencyValue = new CurrencyValue(new CurrencyValue(true, 1, 1));
 		assertEquals(1, actualCurrencyValue.getCents());
@@ -107,76 +172,11 @@ class CurrencyValueTest {
 	}
 
 	@Test
-	void testConstructor2() {
-		CurrencyValue actualCurrencyValue = new CurrencyValue();
-		assertEquals(0, actualCurrencyValue.getCents());
-		assertEquals(0, actualCurrencyValue.getDollars());
-	}
-
-	@Test
 	void testConstructor20() {
 		CurrencyValue actualCurrencyValue = new CurrencyValue(false, 1, 100);
 
 		assertEquals(0, actualCurrencyValue.getCents());
 		assertEquals(2, actualCurrencyValue.getDollars());
-	}
-
-	@Test
-	void testConstructor3() {
-		CurrencyValue actualCurrencyValue = new CurrencyValue(1, 1);
-
-		assertEquals(1, actualCurrencyValue.getCents());
-		assertEquals(1, actualCurrencyValue.getDollars());
-	}
-
-	@Test
-	void testConstructor4() {
-		CurrencyValue actualCurrencyValue = new CurrencyValue(-99, 1);
-
-		assertEquals(1, actualCurrencyValue.getCents());
-		assertTrue(actualCurrencyValue.isNegative());
-		assertEquals(99, actualCurrencyValue.getDollars());
-	}
-
-	@Test
-	void testConstructor5() {
-		CurrencyValue actualCurrencyValue = new CurrencyValue(1, -99);
-
-		assertEquals(99, actualCurrencyValue.getCents());
-		assertTrue(actualCurrencyValue.isNegative());
-		assertEquals(1, actualCurrencyValue.getDollars());
-	}
-
-	@Test
-	void testConstructor6() {
-		CurrencyValue actualCurrencyValue = new CurrencyValue(1, Integer.MIN_VALUE);
-
-		assertEquals(48, actualCurrencyValue.getCents());
-		assertTrue(actualCurrencyValue.isNegative());
-		assertEquals(21474837, actualCurrencyValue.getDollars());
-	}
-
-	@Test
-	void testConstructor7() {
-		CurrencyValue actualCurrencyValue = new CurrencyValue(Integer.MIN_VALUE, Integer.MIN_VALUE);
-
-		assertEquals(52, actualCurrencyValue.getCents());
-		assertEquals(2126008811, actualCurrencyValue.getDollars());
-	}
-
-	@Test
-	void testConstructor8() {
-		CurrencyValue actualCurrencyValue = new CurrencyValue(1, 100);
-
-		assertEquals(0, actualCurrencyValue.getCents());
-		assertEquals(2, actualCurrencyValue.getDollars());
-	}
-
-	@Test
-	void testConstructor9() {
-		CurrencyValue actualCurrencyValue = new CurrencyValue(new CurrencyValue());
-		assertEquals(0, actualCurrencyValue.getCents());
-		assertEquals(0, actualCurrencyValue.getDollars());
 	}
 
 	@Test
@@ -246,6 +246,92 @@ class CurrencyValueTest {
 		assertEquals(2, currencyValue.getCents());
 		assertFalse(currencyValue.isNegative());
 		assertEquals(2, currencyValue.getDollars());
+	}
+
+	@Test
+	void testAdd2() {
+		CurrencyValue currencyValue = new CurrencyValue(true, 1, 1);
+		currencyValue.add(2, 2);
+		assertEquals(1, currencyValue.getCents());
+		assertFalse(currencyValue.isNegative());
+		assertEquals(1, currencyValue.getDollars());
+	}
+
+	@Test
+	void testAdd3() {
+		CurrencyValue currencyValue = new CurrencyValue();
+		currencyValue.add(-99, 2);
+		currencyValue.add(2, 2);
+		assertEquals(0, currencyValue.getCents());
+		assertTrue(currencyValue.isNegative());
+		assertEquals(97, currencyValue.getDollars());
+	}
+
+	@Test
+	void testAdd4() {
+		CurrencyValue currencyValue = new CurrencyValue();
+		currencyValue.add(2, -99);
+		currencyValue.add(2, 2);
+		assertEquals(97, currencyValue.getCents());
+		assertTrue(currencyValue.isNegative());
+		assertEquals(0, currencyValue.getDollars());
+	}
+
+	@Test
+	void testAdd5() {
+		CurrencyValue currencyValue = new CurrencyValue();
+		currencyValue.setDollars(-99);
+		currencyValue.setCents(0);
+		currencyValue.setNegative(true);
+
+		CurrencyValue currencyValue1 = new CurrencyValue();
+		currencyValue1.add(currencyValue);
+		currencyValue1.add(2, 2);
+		assertEquals(98, currencyValue1.getCents());
+		assertTrue(currencyValue1.isNegative());
+		assertEquals(96, currencyValue1.getDollars());
+	}
+
+	@Test
+	void testAdd6() {
+		CurrencyValue currencyValue = new CurrencyValue();
+		currencyValue.setDollars(0);
+		currencyValue.setCents(-99);
+		currencyValue.setNegative(true);
+
+		CurrencyValue currencyValue1 = new CurrencyValue();
+		currencyValue1.add(currencyValue);
+		currencyValue1.add(2, 2);
+		assertEquals(3, currencyValue1.getCents());
+		assertFalse(currencyValue1.isNegative());
+		assertEquals(1, currencyValue1.getDollars());
+	}
+
+	@Test
+	void testAdd7() {
+		CurrencyValue currencyValue = new CurrencyValue();
+		currencyValue.add(-99, 2);
+		assertEquals(2, currencyValue.getCents());
+		assertTrue(currencyValue.isNegative());
+		assertEquals(99, currencyValue.getDollars());
+	}
+
+	@Test
+	void testAdd8() {
+		CurrencyValue currencyValue = new CurrencyValue();
+		currencyValue.add(2, -99);
+		assertEquals(99, currencyValue.getCents());
+		assertTrue(currencyValue.isNegative());
+		assertEquals(2, currencyValue.getDollars());
+	}
+
+	@Test
+	void testAdd9() {
+		CurrencyValue currencyValue = new CurrencyValue();
+		currencyValue.add(2, Integer.MIN_VALUE);
+		assertEquals(48, currencyValue.getCents());
+		assertTrue(currencyValue.isNegative());
+		assertEquals(21474838, currencyValue.getDollars());
 	}
 
 	@Test
@@ -373,15 +459,6 @@ class CurrencyValueTest {
 	}
 
 	@Test
-	void testAdd2() {
-		CurrencyValue currencyValue = new CurrencyValue(true, 1, 1);
-		currencyValue.add(2, 2);
-		assertEquals(1, currencyValue.getCents());
-		assertFalse(currencyValue.isNegative());
-		assertEquals(1, currencyValue.getDollars());
-	}
-
-	@Test
 	void testAdd20() {
 		CurrencyValue currencyValue = new CurrencyValue();
 
@@ -407,83 +484,6 @@ class CurrencyValueTest {
 		assertEquals(47, currencyValue.getCents());
 		assertFalse(currencyValue.isNegative());
 		assertEquals(21474834, currencyValue.getDollars());
-	}
-
-	@Test
-	void testAdd3() {
-		CurrencyValue currencyValue = new CurrencyValue();
-		currencyValue.add(-99, 2);
-		currencyValue.add(2, 2);
-		assertEquals(0, currencyValue.getCents());
-		assertTrue(currencyValue.isNegative());
-		assertEquals(97, currencyValue.getDollars());
-	}
-
-	@Test
-	void testAdd4() {
-		CurrencyValue currencyValue = new CurrencyValue();
-		currencyValue.add(2, -99);
-		currencyValue.add(2, 2);
-		assertEquals(97, currencyValue.getCents());
-		assertTrue(currencyValue.isNegative());
-		assertEquals(0, currencyValue.getDollars());
-	}
-
-	@Test
-	void testAdd5() {
-		CurrencyValue currencyValue = new CurrencyValue();
-		currencyValue.setDollars(-99);
-		currencyValue.setCents(0);
-		currencyValue.setNegative(true);
-
-		CurrencyValue currencyValue1 = new CurrencyValue();
-		currencyValue1.add(currencyValue);
-		currencyValue1.add(2, 2);
-		assertEquals(98, currencyValue1.getCents());
-		assertTrue(currencyValue1.isNegative());
-		assertEquals(96, currencyValue1.getDollars());
-	}
-
-	@Test
-	void testAdd6() {
-		CurrencyValue currencyValue = new CurrencyValue();
-		currencyValue.setDollars(0);
-		currencyValue.setCents(-99);
-		currencyValue.setNegative(true);
-
-		CurrencyValue currencyValue1 = new CurrencyValue();
-		currencyValue1.add(currencyValue);
-		currencyValue1.add(2, 2);
-		assertEquals(3, currencyValue1.getCents());
-		assertFalse(currencyValue1.isNegative());
-		assertEquals(1, currencyValue1.getDollars());
-	}
-
-	@Test
-	void testAdd7() {
-		CurrencyValue currencyValue = new CurrencyValue();
-		currencyValue.add(-99, 2);
-		assertEquals(2, currencyValue.getCents());
-		assertTrue(currencyValue.isNegative());
-		assertEquals(99, currencyValue.getDollars());
-	}
-
-	@Test
-	void testAdd8() {
-		CurrencyValue currencyValue = new CurrencyValue();
-		currencyValue.add(2, -99);
-		assertEquals(99, currencyValue.getCents());
-		assertTrue(currencyValue.isNegative());
-		assertEquals(2, currencyValue.getDollars());
-	}
-
-	@Test
-	void testAdd9() {
-		CurrencyValue currencyValue = new CurrencyValue();
-		currencyValue.add(2, Integer.MIN_VALUE);
-		assertEquals(48, currencyValue.getCents());
-		assertTrue(currencyValue.isNegative());
-		assertEquals(21474838, currencyValue.getDollars());
 	}
 
 	@Test

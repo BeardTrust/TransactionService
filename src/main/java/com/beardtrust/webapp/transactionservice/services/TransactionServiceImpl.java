@@ -3,11 +3,14 @@ package com.beardtrust.webapp.transactionservice.services;
 import com.beardtrust.webapp.transactionservice.dtos.FinancialTransactionDTO;
 import com.beardtrust.webapp.transactionservice.entities.*;
 import com.beardtrust.webapp.transactionservice.exceptions.IncorrectTransactionSpecializationException;
+import com.beardtrust.webapp.transactionservice.exceptions.TransactionNotFoundException;
 import com.beardtrust.webapp.transactionservice.models.NewTransactionModel;
 import com.beardtrust.webapp.transactionservice.models.TransactionSpecialization;
+import com.beardtrust.webapp.transactionservice.models.UpdateTransactionModel;
 import com.beardtrust.webapp.transactionservice.repos.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.validator.GenericValidator;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.data.domain.Page;
@@ -16,9 +19,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.apache.commons.lang3.math.NumberUtils.isCreatable;
 
 /**
  * This class provides the implementation of the Transaction Service.
@@ -86,8 +92,8 @@ public class TransactionServiceImpl implements TransactionService {
 		Page<FinancialTransactionDTO> financialTransactions = null;
 
 		try {
-			financialTransactions = financialTransactionRepository.findAll(page)
-					.map(transaction -> modelMapper.map(transaction,
+			financialTransactions =
+					financialTransactionRepository.findAll(page).map((transaction) -> modelMapper.map(transaction,
 							FinancialTransactionDTO.class));
 
 			log.info("Retrieved financial transactions");
@@ -227,6 +233,118 @@ public class TransactionServiceImpl implements TransactionService {
 		log.trace("End of TransactionService.createTransaction(<redacted transaction details>)");
 
 		return result;
+	}
+
+	/**
+	 * This method takes an UpdateTransactionModel object and attempts to update
+	 * the specified transaction's notes, status, and status time.  It throws a
+	 * TransactionNotFoundException if the specified transaction cannot be located
+	 * in the database.
+	 *
+	 * @param transaction UpdateTransactionModel the entity containing updated data
+	 * @return FinancialTransactionDTO the DTO for the updated transaction
+	 */
+	@Override
+	public FinancialTransactionDTO updateTransaction(UpdateTransactionModel transaction) {
+		log.trace("Start of TransactionService.updateTransaction(<redacted transaction details>)");
+
+		FinancialTransactionDTO result = null;
+
+		try {
+			ModelMapper modelMapper = new ModelMapper();
+			modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+			Optional<FinancialTransaction> updatedTransaction =
+					financialTransactionRepository.findById(transaction.getTransactionId());
+			Optional<TransactionStatus> transactionStatus =
+					transactionStatusRepository.findByStatusName(transaction.getTransactionStatusName());
+
+			if (updatedTransaction.isPresent() && transactionStatus.isPresent()) {
+				updatedTransaction.get().setTransactionStatus(transactionStatus.get());
+				updatedTransaction.get().setNotes(transaction.getNotes());
+				updatedTransaction.get().setStatusTime(LocalDateTime.now());
+				result = modelMapper.map(financialTransactionRepository.save(updatedTransaction.get()),
+						FinancialTransactionDTO.class);
+			} else {
+				throw new TransactionNotFoundException("Transaction update failed; transaction not found");
+			}
+		} catch (Exception e) {
+			log.warn(e.getMessage());
+		}
+
+		log.trace("End of TransactionService.updateTransaction(<redacted transaction details>)");
+		return result;
+	}
+
+	/**
+	 * This method takes two String arguments - the first being an asset's id and the second being
+	 * a string to search by - and a Pageable object and returns the requested page of transactions
+	 * associated with the provided asset id from the database.
+	 *
+	 * @param assetId String	the id of the associated asset
+	 * @param search  String	the string object to search the database for
+	 * @param page    Pageable	the pageable object with the requested page data
+	 * @return Page<FinancialTransactionDTO>	the requested page of transactions
+	 */
+	@Override
+	public Page<FinancialTransactionDTO> getTransactionsByAssetId(String assetId, String search, Pageable page) {
+		log.trace("Start of TransactionService.getTransactionsByAssetId(<redacted request information>)");
+		Page<FinancialTransaction> transactions;
+		Page<FinancialTransactionDTO> results = null;
+
+		try {
+			ModelMapper modelMapper = new ModelMapper();
+			modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+			if (search == null) {
+				log.debug("No search parameter provided");
+
+				transactions =
+						financialTransactionRepository.findAllBySource_IdOrTarget_IdIs(assetId, assetId, page);
+			} else if (isCreatable(search)) {
+				log.debug("Search criteria is a number");
+
+				String[] values = search.split(",");
+				CurrencyValue transactionAmount = new CurrencyValue();
+
+				if (values.length == 2) {
+					log.debug("Search criteria has two integer values");
+					transactionAmount.setDollars(Integer.parseInt(values[0]));
+					transactionAmount.setCents(Integer.parseInt(values[1]));
+				} else {
+					log.debug("Search criteria has one integer value");
+					transactionAmount.setCents(Integer.parseInt(values[0]));
+				}
+
+				transactions =
+						financialTransactionRepository.findAllBySource_IdAndTransactionAmountOrTarget_IdAndTransactionAmount(assetId, transactionAmount, assetId, transactionAmount, page);
+			} else if (GenericValidator.isDate(search, "yyyy-MM-dd", true)) {
+				log.debug("Search criteria is a date");
+				LocalDate searchDate = LocalDate.parse(search);
+
+				LocalDateTime startDate = searchDate.atStartOfDay();
+				LocalDateTime endDate = startDate.plusDays(1);
+
+				transactions =
+						financialTransactionRepository.findAllBySource_IdAndStatusTimeBetweenOrTarget_IdAndStatusTimeBetween(assetId, startDate, endDate, assetId, startDate, endDate,
+								page);
+
+			} else {
+				log.debug("Search criteria is a string");
+				transactions =
+						financialTransactionRepository.findAllBySource_IdAndTransactionStatus_StatusNameOrTarget_IdAndTransactionStatus_StatusNameOrSource_IdAndTarget_IdOrTarget_IdAndSource_IdOrSource_IdAndNotesContainsIgnoreCaseOrTarget_IdAndNotesContainsIgnoreCase(assetId, search, assetId, search, assetId, search, assetId, search, assetId, search, assetId, search, page);
+
+			}
+
+			results = transactions.map((transaction) -> modelMapper.map(transaction, FinancialTransactionDTO.class));
+		} catch (Exception e) {
+			log.warn(e.getMessage());
+		}
+
+
+		log.trace("End of TransactionService.getTransactionsByAssetId(<redacted request information>)");
+
+		return results;
 	}
 
 	/**

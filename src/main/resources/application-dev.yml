@@ -33,3 +33,7 @@ token:
 logging:
   level:
     web: Debug
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka

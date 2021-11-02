@@ -26,6 +26,10 @@ class AccountEntityTest {
 		assertEquals(1, actualAccountEntity.getInterest().intValue());
 		assertEquals("Nickname", actualAccountEntity.getNickname());
 		assertSame(accountTypeEntity, actualAccountEntity.getType());
+		assertEquals(
+				"FinancialAsset{id='null', user=null, activeStatus=false, balance=null, createDate=null, targetedTransactions"
+						+ "=null, sourcedTransactions=null}",
+				actualAccountEntity.toString());
 	}
 }
 

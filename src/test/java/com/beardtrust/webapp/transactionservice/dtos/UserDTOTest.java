@@ -45,6 +45,8 @@ class UserDTOTest {
 		assertEquals("Role", actualUserDTO.getRole());
 		assertEquals("42", actualUserDTO.getUserId());
 		assertEquals("janedoe", actualUserDTO.getUsername());
+		assertEquals("UserDTO(userId=42, username=janedoe, email=jane.doe@example.org, phone=4105551212, firstName=Jane,"
+				+ " lastName=Doe, dateOfBirth=1970-01-02, role=Role)", actualUserDTO.toString());
 	}
 
 	@Test
@@ -53,6 +55,73 @@ class UserDTOTest {
 				LocalDate.ofEpochDay(1L), "Role")).equals(null));
 		assertFalse((new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
 				LocalDate.ofEpochDay(1L), "Role")).equals("Different type to UserDTO"));
+	}
+
+	@Test
+	void testEquals2() {
+		UserDTO userDTO = new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role");
+		assertTrue(userDTO.equals(userDTO));
+		int expectedHashCodeResult = userDTO.hashCode();
+		assertEquals(expectedHashCodeResult, userDTO.hashCode());
+	}
+
+	@Test
+	void testEquals3() {
+		UserDTO userDTO = new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role");
+		UserDTO userDTO1 = new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role");
+
+		assertTrue(userDTO.equals(userDTO1));
+		int expectedHashCodeResult = userDTO.hashCode();
+		assertEquals(expectedHashCodeResult, userDTO1.hashCode());
+	}
+
+	@Test
+	void testEquals4() {
+		UserDTO userDTO = new UserDTO("janedoe", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role");
+		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role")));
+	}
+
+	@Test
+	void testEquals5() {
+		UserDTO userDTO = new UserDTO(null, "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role");
+		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role")));
+	}
+
+	@Test
+	void testEquals6() {
+		UserDTO userDTO = new UserDTO("42", "42", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role");
+		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role")));
+	}
+
+	@Test
+	void testEquals7() {
+		UserDTO userDTO = new UserDTO("42", null, "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role");
+		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role")));
+	}
+
+	@Test
+	void testEquals8() {
+		UserDTO userDTO = new UserDTO("42", "janedoe", "42", "4105551212", "Jane", "Doe", LocalDate.ofEpochDay(1L), "Role");
+		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role")));
+	}
+
+	@Test
+	void testEquals9() {
+		UserDTO userDTO = new UserDTO("42", "janedoe", null, "4105551212", "Jane", "Doe", LocalDate.ofEpochDay(1L), "Role");
+		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
+				LocalDate.ofEpochDay(1L), "Role")));
 	}
 
 	@Test
@@ -135,15 +204,6 @@ class UserDTOTest {
 	}
 
 	@Test
-	void testEquals2() {
-		UserDTO userDTO = new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role");
-		assertTrue(userDTO.equals(userDTO));
-		int expectedHashCodeResult = userDTO.hashCode();
-		assertEquals(expectedHashCodeResult, userDTO.hashCode());
-	}
-
-	@Test
 	void testEquals20() {
 		UserDTO userDTO = new UserDTO(null, "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
 				LocalDate.ofEpochDay(1L), "Role");
@@ -176,64 +236,6 @@ class UserDTOTest {
 		assertTrue(userDTO.equals(userDTO1));
 		int expectedHashCodeResult = userDTO.hashCode();
 		assertEquals(expectedHashCodeResult, userDTO1.hashCode());
-	}
-
-	@Test
-	void testEquals3() {
-		UserDTO userDTO = new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role");
-		UserDTO userDTO1 = new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role");
-
-		assertTrue(userDTO.equals(userDTO1));
-		int expectedHashCodeResult = userDTO.hashCode();
-		assertEquals(expectedHashCodeResult, userDTO1.hashCode());
-	}
-
-	@Test
-	void testEquals4() {
-		UserDTO userDTO = new UserDTO("janedoe", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role");
-		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role")));
-	}
-
-	@Test
-	void testEquals5() {
-		UserDTO userDTO = new UserDTO(null, "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role");
-		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role")));
-	}
-
-	@Test
-	void testEquals6() {
-		UserDTO userDTO = new UserDTO("42", "42", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role");
-		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role")));
-	}
-
-	@Test
-	void testEquals7() {
-		UserDTO userDTO = new UserDTO("42", null, "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role");
-		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role")));
-	}
-
-	@Test
-	void testEquals8() {
-		UserDTO userDTO = new UserDTO("42", "janedoe", "42", "4105551212", "Jane", "Doe", LocalDate.ofEpochDay(1L), "Role");
-		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role")));
-	}
-
-	@Test
-	void testEquals9() {
-		UserDTO userDTO = new UserDTO("42", "janedoe", null, "4105551212", "Jane", "Doe", LocalDate.ofEpochDay(1L), "Role");
-		assertFalse(userDTO.equals(new UserDTO("42", "janedoe", "jane.doe@example.org", "4105551212", "Jane", "Doe",
-				LocalDate.ofEpochDay(1L), "Role")));
 	}
 }
 

@@ -2,15 +2,20 @@ package com.beardtrust.webapp.transactionservice.controllers;
 
 import com.beardtrust.webapp.transactionservice.dtos.FinancialTransactionDTO;
 import com.beardtrust.webapp.transactionservice.models.NewTransactionModel;
+import com.beardtrust.webapp.transactionservice.models.UpdateTransactionModel;
 import com.beardtrust.webapp.transactionservice.services.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
 
 /**
  * This class represents the controller of the RESTful API for transactions.
@@ -33,7 +38,6 @@ public class TransactionController {
 	 *
 	 * @return a ResponseEntity<String> with HttpStatus.OK
 	 */
-	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/health")
 	public ResponseEntity<String> checkHealth() {
 		String status = transactionService.checkHealth();
@@ -55,7 +59,7 @@ public class TransactionController {
 	 * @param page a Pageable object to request a page of transactions
 	 * @return a Page<FinancialTransaction> object
 	 */
-	@PreAuthorize("hasAuthority('admin')")
+//	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getAllTransactions(Pageable page) {
 		log.trace("Start of TransactionController.getAllTransactions(" + page + ")");
@@ -69,6 +73,14 @@ public class TransactionController {
 		return response;
 	}
 
+//	@PreAuthorize(value = "permitAll()")
+//	@GetMapping(path = "/transactions/{assetId}")
+//	public ResponseEntity<Page<FinancialTransactionDTO>> getTransactionsByAsset(@PathVariable(name = "assetId")String assetId){
+//		ResponseEntity<Page<FinancialTransactionDTO>> results;
+//
+//		results = transactionService;
+//	}
+
 	/**
 	 * This method accepts an HTTP GET request on the /transactions/account
 	 * endpoint and returns the requested Page of Account Transactions.
@@ -76,7 +88,7 @@ public class TransactionController {
 	 * @param page a Pageable object to request a page of transactions
 	 * @return a Page<AccountTransaction> object
 	 */
-	@PreAuthorize("hasAuthority('admin')")
+//	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/account")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getAccountTransactions(Pageable page) {
 		log.trace("Start of TransactionController.getAccountTransactions(" + page + ")");
@@ -97,7 +109,7 @@ public class TransactionController {
 	 * @param page a Pageable object to request a page of transactions
 	 * @return a Page<CardTransaction> object
 	 */
-	@PreAuthorize("hasAuthority('admin')")
+//	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/card")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getCardTransactions(Pageable page) {
 		log.trace("Start of TransactionController.getCardTransactions(" + page + ")");
@@ -118,7 +130,7 @@ public class TransactionController {
 	 * @param page a Pageable object to request a page of transactions
 	 * @return a Page<LoanTransaction> object
 	 */
-	@PreAuthorize("hasAuthority('admin')")
+//	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/loan")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getLoanTransactions(Pageable page) {
 		log.trace("Start of TransactionController.getLoanTransactions(" + page + ")");
@@ -131,19 +143,43 @@ public class TransactionController {
 		return response;
 	}
 
-	//	@PreAuthorize("hasAuthority('admin')")
+	@GetMapping(path = "/transactions/{id}")
+	public ResponseEntity<Page<FinancialTransactionDTO>> getTransactionsByAssetId(@PathVariable(name = "id")String assetId,
+																			@RequestParam(name = "search", required = false)String search,
+																				  Pageable page){
+		log.trace("Start of TransactionController.getTransactionsByAssetId(<redacted request data>)");
+		log.warn("Search is: " + search);
+		log.trace("End of TransactionController.getTransactionsByAssetId(<redacted request data>)");
+		return new ResponseEntity<>(transactionService.getTransactionsByAssetId(assetId, search, page), HttpStatus.OK);
+	}
+
+//	@PreAuthorize("hasAuthority('admin')")
 	@PostMapping(path = "/transactions")
 	public ResponseEntity<FinancialTransactionDTO> createTransaction(@RequestBody() NewTransactionModel transaction) {
 		log.trace("Start of TransactionController.createTransaction(<redacted transaction details>)");
 
 		log.info("Transaction Model: " + transaction.toString());
 
-		ResponseEntity<FinancialTransactionDTO> response = null;
+		ResponseEntity<FinancialTransactionDTO> response;
 		response = new ResponseEntity<>(transactionService.createTransaction(transaction), HttpStatus.CREATED);
 
 
 		log.trace("End of TransactionController.createTransaction(<redacted transaction details>)");
 
+		return response;
+	}
+
+//	@PreAuthorize("hasAuthority('admin')")
+	@PutMapping(path = "/transactions")
+	@Consumes({MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@Produces({MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<FinancialTransactionDTO> updateTransaction(@RequestBody() UpdateTransactionModel transaction){
+		log.trace("Start of TransactionController.updateTransaction(<redacted transaction details>)");
+
+		ResponseEntity<FinancialTransactionDTO> response;
+		response = new ResponseEntity<>(transactionService.updateTransaction(transaction), HttpStatus.OK);
+
+		log.trace("End of TransactionController.updateTransaction(<redacted transaction details>)");
 		return response;
 	}
 }
