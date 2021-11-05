@@ -53,8 +53,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 */
 	@Override
 	public String checkHealth() {
-		log.trace("Start of TransactionService.checkHealth()");
-
 		StringBuilder healthStatus = new StringBuilder();
 		Pageable page = PageRequest.of(0, 1);
 
@@ -70,7 +68,7 @@ public class TransactionServiceImpl implements TransactionService {
 			healthStatus.append("Unhealthy");
 		}
 
-		log.trace("Start of TransactionService.checkHealth()");
+		
 		return healthStatus.toString();
 	}
 
@@ -84,8 +82,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 */
 	@Override
 	public Page<FinancialTransactionDTO> getAllTransactions(Pageable page) {
-		log.trace("Start of TransactionService.getAllTransactions(" + page + ")");
-
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -102,7 +98,7 @@ public class TransactionServiceImpl implements TransactionService {
 					e.getMessage());
 		}
 
-		log.trace("End of TransactionService.getAllTransactions(" + page + ")");
+		
 		return financialTransactions;
 	}
 
@@ -116,8 +112,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 */
 	@Override
 	public Page<FinancialTransactionDTO> getAccountTransactions(Pageable page) {
-		log.trace("End of TransactionService.getAccountTransactions(" + page + ")");
-
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -133,7 +127,7 @@ public class TransactionServiceImpl implements TransactionService {
 			log.debug("Exception encountered while retrieving account transactions:\n" + e.getMessage());
 		}
 
-		log.trace("End of TransactionService.getAccountTransactions(" + page + ")");
+		
 		return accountTransactions;
 	}
 
@@ -147,8 +141,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 */
 	@Override
 	public Page<FinancialTransactionDTO> getCardTransactions(Pageable page) {
-		log.trace("End of TransactionService.getCardTransactions(" + page + ")");
-
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -164,7 +156,7 @@ public class TransactionServiceImpl implements TransactionService {
 			log.debug("Exception encountered while retrieving card transactions:\n" + e.getMessage());
 		}
 
-		log.trace("End of TransactionService.getCardTransactions(" + page + ")");
+		
 		return cardTransactions;
 	}
 
@@ -178,8 +170,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 */
 	@Override
 	public Page<FinancialTransactionDTO> getLoanTransactions(Pageable page) {
-		log.trace("Start of TransactionService.getLoanTransactions(" + page + ")");
-
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -195,7 +185,7 @@ public class TransactionServiceImpl implements TransactionService {
 			log.debug("Exception encountered while retrieving loan transactions:\n" + e.getMessage());
 		}
 
-		log.trace("End of TransactionService.getLoanTransactions(" + page + ")");
+		
 		return loanTransactions;
 	}
 
@@ -208,8 +198,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 */
 	@Override
 	public FinancialTransactionDTO createTransaction(NewTransactionModel transaction) {
-		log.trace("Start of TransactionService.createTransaction(<redacted transaction details>)");
-
 		FinancialTransactionDTO result = null;
 		try {
 			switch (transaction.getTransactionSpecialization()) {
@@ -230,7 +218,7 @@ public class TransactionServiceImpl implements TransactionService {
 			log.warn(e.getMessage());
 		}
 
-		log.trace("End of TransactionService.createTransaction(<redacted transaction details>)");
+		
 
 		return result;
 	}
@@ -246,8 +234,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 */
 	@Override
 	public FinancialTransactionDTO updateTransaction(UpdateTransactionModel transaction) {
-		log.trace("Start of TransactionService.updateTransaction(<redacted transaction details>)");
-
 		FinancialTransactionDTO result = null;
 
 		try {
@@ -272,7 +258,7 @@ public class TransactionServiceImpl implements TransactionService {
 			log.warn(e.getMessage());
 		}
 
-		log.trace("End of TransactionService.updateTransaction(<redacted transaction details>)");
+		
 		return result;
 	}
 
@@ -288,7 +274,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 */
 	@Override
 	public Page<FinancialTransactionDTO> getTransactionsByAssetId(String assetId, String search, Pageable page) {
-		log.trace("Start of TransactionService.getTransactionsByAssetId(<redacted request information>)");
 		Page<FinancialTransaction> transactions;
 		Page<FinancialTransactionDTO> results = null;
 
@@ -342,7 +327,7 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 
 
-		log.trace("End of TransactionService.getTransactionsByAssetId(<redacted request information>)");
+		
 
 		return results;
 	}
@@ -355,7 +340,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 * @return FinancialTransactionDTO object for the created transaction
 	 */
 	private FinancialTransactionDTO createAccountTransaction(NewTransactionModel transaction) throws IncorrectTransactionSpecializationException {
-		log.trace("Start of TransactionService.createAccountTransaction(<redacted transaction details>)");
 		if (transaction.getTransactionSpecialization() != TransactionSpecialization.ACCOUNT) {
 			throw new IncorrectTransactionSpecializationException("Unable to create AccountTransaction from " +
 					"NewTransactionModel with " + transaction.getTransactionSpecialization().toString() +
@@ -390,7 +374,7 @@ public class TransactionServiceImpl implements TransactionService {
 			log.warn(e.getMessage());
 		}
 
-		log.trace("End of TransactionService.createAccountTransaction(<redacted transaction details>)");
+		
 
 		return result;
 	}
@@ -403,7 +387,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 * @return FinancialTransactionDTO object for the created transaction
 	 */
 	private FinancialTransactionDTO createCardTransaction(NewTransactionModel transaction) throws IncorrectTransactionSpecializationException {
-		log.trace("Start of TransactionService.createCardTransaction(<redacted transaction details>)");
 		if (transaction.getTransactionSpecialization() != TransactionSpecialization.CARD) {
 			throw new IncorrectTransactionSpecializationException("Unable to create CardTransaction from " +
 					"NewTransactionModel with " + transaction.getTransactionSpecialization().toString() +
@@ -437,8 +420,6 @@ public class TransactionServiceImpl implements TransactionService {
 			log.warn(e.getMessage());
 		}
 
-		log.trace("End of TransactionService.createCardTransaction(<redacted transaction details>)");
-
 		return result;
 	}
 
@@ -450,8 +431,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 * @return FinancialTransactionDTO object for the created transaction
 	 */
 	private FinancialTransactionDTO createLoanTransaction(NewTransactionModel transaction) throws IncorrectTransactionSpecializationException {
-		log.trace("Start of TransactionService.createCardTransaction(<redacted transaction details>)");
-
 		if (transaction.getTransactionSpecialization() != TransactionSpecialization.LOAN) {
 			throw new IncorrectTransactionSpecializationException("Unable to create LoanTransaction from " +
 					"NewTransactionModel with " + transaction.getTransactionSpecialization().toString() +
@@ -484,8 +463,6 @@ public class TransactionServiceImpl implements TransactionService {
 		} catch (Exception e) {
 			log.warn(e.getMessage());
 		}
-
-		log.trace("End of TransactionService.createLoanTransaction(<redacted transaction details>)");
 
 		return result;
 	}

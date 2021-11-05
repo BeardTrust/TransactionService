@@ -62,13 +62,9 @@ public class TransactionController {
 //	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getAllTransactions(Pageable page) {
-		log.trace("Start of TransactionController.getAllTransactions(" + page + ")");
-
 		ResponseEntity<Page<FinancialTransactionDTO>> response;
 
 		response = new ResponseEntity<>(transactionService.getAllTransactions(page), HttpStatus.OK);
-
-		log.trace("End of TransactionController.getAllTransactions(" + page + ")");
 
 		return response;
 	}
@@ -91,13 +87,9 @@ public class TransactionController {
 //	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/account")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getAccountTransactions(Pageable page) {
-		log.trace("Start of TransactionController.getAccountTransactions(" + page + ")");
-
 		ResponseEntity<Page<FinancialTransactionDTO>> response;
 
 		response = new ResponseEntity<>(transactionService.getAccountTransactions(page), HttpStatus.OK);
-
-		log.trace("End of TransactionController.getAccountTransactions(" + page + ")");
 
 		return response;
 	}
@@ -112,13 +104,9 @@ public class TransactionController {
 //	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/card")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getCardTransactions(Pageable page) {
-		log.trace("Start of TransactionController.getCardTransactions(" + page + ")");
-
 		ResponseEntity<Page<FinancialTransactionDTO>> response;
 
 		response = new ResponseEntity<>(transactionService.getCardTransactions(page), HttpStatus.OK);
-
-		log.trace("End of TransactionController.getCardTransactions(" + page + ")");
 
 		return response;
 	}
@@ -133,13 +121,10 @@ public class TransactionController {
 //	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/loan")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getLoanTransactions(Pageable page) {
-		log.trace("Start of TransactionController.getLoanTransactions(" + page + ")");
-
 		ResponseEntity<Page<FinancialTransactionDTO>> response;
 
 		response = new ResponseEntity<>(transactionService.getLoanTransactions(page), HttpStatus.OK);
 
-		log.trace("End of TransactionController.getLoanTransactions(" + page + ")");
 		return response;
 	}
 
@@ -147,24 +132,16 @@ public class TransactionController {
 	public ResponseEntity<Page<FinancialTransactionDTO>> getTransactionsByAssetId(@PathVariable(name = "id")String assetId,
 																			@RequestParam(name = "search", required = false)String search,
 																				  Pageable page){
-		log.trace("Start of TransactionController.getTransactionsByAssetId(<redacted request data>)");
-		log.warn("Search is: " + search);
-		log.trace("End of TransactionController.getTransactionsByAssetId(<redacted request data>)");
 		return new ResponseEntity<>(transactionService.getTransactionsByAssetId(assetId, search, page), HttpStatus.OK);
 	}
 
 //	@PreAuthorize("hasAuthority('admin')")
 	@PostMapping(path = "/transactions")
 	public ResponseEntity<FinancialTransactionDTO> createTransaction(@RequestBody() NewTransactionModel transaction) {
-		log.trace("Start of TransactionController.createTransaction(<redacted transaction details>)");
-
 		log.info("Transaction Model: " + transaction.toString());
 
 		ResponseEntity<FinancialTransactionDTO> response;
 		response = new ResponseEntity<>(transactionService.createTransaction(transaction), HttpStatus.CREATED);
-
-
-		log.trace("End of TransactionController.createTransaction(<redacted transaction details>)");
 
 		return response;
 	}
@@ -174,12 +151,9 @@ public class TransactionController {
 	@Consumes({MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	@Produces({MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<FinancialTransactionDTO> updateTransaction(@RequestBody() UpdateTransactionModel transaction){
-		log.trace("Start of TransactionController.updateTransaction(<redacted transaction details>)");
-
 		ResponseEntity<FinancialTransactionDTO> response;
 		response = new ResponseEntity<>(transactionService.updateTransaction(transaction), HttpStatus.OK);
 
-		log.trace("End of TransactionController.updateTransaction(<redacted transaction details>)");
 		return response;
 	}
 }
