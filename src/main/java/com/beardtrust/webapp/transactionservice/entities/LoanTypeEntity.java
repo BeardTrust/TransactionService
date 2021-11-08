@@ -13,12 +13,13 @@ public class LoanTypeEntity {
 	@Id
 	@Column(name = "id")
 	private String id;
-	private String typeName;
+	@Column(name = "active_status")
+	private boolean activeStatus;
+	private Double apr;
 	@Column(name = "description")
 	private String description;
-	private Double apr;
 	private Integer numMonths;
-	private boolean activeStatus;
+	private String typeName;
 
 	public LoanTypeEntity() {
 		this.id = UUID.randomUUID().toString();

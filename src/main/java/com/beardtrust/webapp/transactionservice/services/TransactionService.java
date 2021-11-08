@@ -1,6 +1,7 @@
 package com.beardtrust.webapp.transactionservice.services;
 
 import com.beardtrust.webapp.transactionservice.dtos.FinancialTransactionDTO;
+import com.beardtrust.webapp.transactionservice.entities.LoanTransaction;
 import com.beardtrust.webapp.transactionservice.models.NewTransactionModel;
 import com.beardtrust.webapp.transactionservice.models.UpdateTransactionModel;
 import org.springframework.data.domain.Page;

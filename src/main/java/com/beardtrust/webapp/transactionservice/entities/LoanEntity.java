@@ -14,6 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "loans")
 public class LoanEntity extends FinancialAsset {
+	private static final long serialVersionUID = -2231557624514791678L;
 
 	@ManyToOne
 	private LoanTypeEntity loanType;
@@ -21,21 +22,21 @@ public class LoanEntity extends FinancialAsset {
 	@AttributeOverrides({
 			@AttributeOverride(name = "cents", column = @Column(name = "principal_cents")),
 			@AttributeOverride(name = "dollars", column = @Column(name = "principal_dollars")),
-			@AttributeOverride(name = "negative", column = @Column(name = "principal_is_negative"))
+			@AttributeOverride(name = "isNegative", column = @Column(name = "principal_is_negative"))
 	})
 	private CurrencyValue principal;
 	@Embedded
 	@AttributeOverrides({
 			@AttributeOverride(name = "cents", column = @Column(name = "due_cents")),
 			@AttributeOverride(name = "dollars", column = @Column(name = "due_dollars")),
-			@AttributeOverride(name = "negative", column = @Column(name = "due_is_negative"))
+			@AttributeOverride(name = "isNegative", column = @Column(name = "due_is_negative"))
 	})
 	private CurrencyValue minDue;
 	@Embedded
 	@AttributeOverrides({
 			@AttributeOverride(name = "cents", column = @Column(name = "fee_cents")),
 			@AttributeOverride(name = "dollars", column = @Column(name = "fee_dollars")),
-			@AttributeOverride(name = "negative", column = @Column(name = "fee_is_negative"))
+			@AttributeOverride(name = "isNegative", column = @Column(name = "fee_is_negative"))
 	})
 	private CurrencyValue lateFee;
 	private LocalDate nextDueDate;
