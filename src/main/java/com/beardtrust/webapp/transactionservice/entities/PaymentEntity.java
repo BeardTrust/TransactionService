@@ -16,6 +16,7 @@ public class PaymentEntity implements Serializable {
 
 	@Id
 	private String id;
+	@SuppressWarnings({"JpaModelReferenceInspection", "JpaDataSourceORMInspection"})
 	@Embedded
 	@AttributeOverrides({
 			@AttributeOverride(name = "cents", column = @Column(name = "dueCents")),
@@ -23,6 +24,7 @@ public class PaymentEntity implements Serializable {
 			@AttributeOverride(name = "isNegative", column = @Column(name = "dueIsNegative"))
 	})
 	private CurrencyValue minDue;
+	@SuppressWarnings({"JpaModelReferenceInspection", "JpaDataSourceORMInspection"})
 	@Embedded
 	@AttributeOverrides({
 			@AttributeOverride(name = "cents", column = @Column(name = "lateCents")),
@@ -104,19 +106,20 @@ public class PaymentEntity implements Serializable {
 	}
 
 	public boolean checkLate() {
+		boolean returnValue = false;
+
 		LocalDateTime l = LocalDateTime.now();
+
 		if (nextDueDate.isAfter(l) && !hasPaid) {
 			lateFee.add(20, 0);
+			lateFee.add(minDue.getDollars(), minDue.getCents());
 			lateFee.setNegative(false);
-			nextDueDate.plusDays(30);
-			previousDueDate.plusDays(30);
-			return true;
+			incrementDueDate();
+			returnValue = true;
 		} else if (nextDueDate.isAfter(l) && hasPaid) {
-			nextDueDate.plusDays(30);
-			previousDueDate.plusDays(30);
-			return false;
+			incrementDueDate();
 		}
-		return false;
+		return returnValue;
 	}
 
 	@Override
