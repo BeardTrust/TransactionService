@@ -177,14 +177,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 		try {
 			loanTransactions = loanTransactionRepository.findAll(page)
-					.map(transaction -> modelMapper.map(transaction,
-							FinancialTransactionDTO.class));
+							.map(transaction -> modelMapper.map(transaction, FinancialTransactionDTO.class));
 
 			log.info("Retrieved loan transactions");
 		} catch (Exception e) {
 			log.debug("Exception encountered while retrieving loan transactions:\n" + e.getMessage());
 		}
-
 		
 		return loanTransactions;
 	}

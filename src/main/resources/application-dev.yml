@@ -33,6 +33,7 @@ token:
 logging:
   level:
     web: Debug
+    sql: Trace
 eureka:
   client:
     service-url:
