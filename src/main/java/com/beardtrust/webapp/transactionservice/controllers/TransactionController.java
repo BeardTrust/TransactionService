@@ -62,6 +62,7 @@ public class TransactionController {
 	 */
 //	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions")
+	@Produces({MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<Page<FinancialTransactionDTO>> getAllTransactions(Pageable page) {
 		ResponseEntity<Page<FinancialTransactionDTO>> response;
 
@@ -69,14 +70,6 @@ public class TransactionController {
 
 		return response;
 	}
-
-//	@PreAuthorize(value = "permitAll()")
-//	@GetMapping(path = "/transactions/{assetId}")
-//	public ResponseEntity<Page<FinancialTransactionDTO>> getTransactionsByAsset(@PathVariable(name = "assetId")String assetId){
-//		ResponseEntity<Page<FinancialTransactionDTO>> results;
-//
-//		results = transactionService;
-//	}
 
 	/**
 	 * This method accepts an HTTP GET request on the /transactions/account
@@ -129,6 +122,7 @@ public class TransactionController {
 		return response;
 	}
 
+//	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping(path = "/transactions/{id}")
 	public ResponseEntity<Page<FinancialTransactionDTO>> getTransactionsByAssetId(@PathVariable(name = "id")String assetId,
 																			@RequestParam(name = "search", required = false)String search,
