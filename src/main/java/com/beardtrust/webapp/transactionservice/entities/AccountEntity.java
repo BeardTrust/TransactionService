@@ -54,6 +54,6 @@ public class AccountEntity extends FinancialAsset {
 
 	@Override
 	public String toString() {
-		return super.toString();
+		return "Account Entity: " + this.getId() + ", Type: " + getType().getName() + ", Interest rate: " + getInterest() + ", Nickname: " + getNickname() + ", Balance: " + getBalance().toString() + ", Date created: " + getCreateDate() + ", Expiration date: " + getType().getExpireDate();
 	}
 }
