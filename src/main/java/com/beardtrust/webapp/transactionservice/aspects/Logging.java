@@ -10,11 +10,23 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+/**
+ * This class handles the logging aspect by logging the calling and
+ * the returning of each function or method at the join point.
+ *
+ * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
+ */
 @Aspect
 @Component
 @Slf4j
 public class Logging {
 
+	/**
+	 * This method takes a join point as an argument and logs the function
+	 * call signature and arguments.
+	 *
+	 * @param joinPoint	JoinPoint the specified join point
+	 */
 	@Before("execution(* com.beardtrust.webapp.transactionservice.*.*.*(..))")
 	public void logMethodInvocation(JoinPoint joinPoint){
 		String className = joinPoint.getTarget().getClass().getSimpleName();
@@ -24,6 +36,12 @@ public class Logging {
 		log.trace("Calling " + className + "." + methodName + "(" + Arrays.toString(args) + ")");
 	}
 
+	/**
+	 * This method takes a join point as an argument and logs the returning
+	 * function's signature and arguments.
+	 *
+	 * @param joinPoint	JoinPoint the specified join point
+	 */
 	@After("execution(* com.beardtrust.webapp.transactionservice.*.*.*(..))")
 	public void logMethodReturn(JoinPoint joinPoint){
 		String className = joinPoint.getTarget().getClass().getSimpleName();
