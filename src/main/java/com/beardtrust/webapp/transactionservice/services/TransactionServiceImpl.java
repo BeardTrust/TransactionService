@@ -358,6 +358,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 			AccountTransaction newTransaction = new AccountTransaction();
 
+			try {
+				newTransaction.setTransactionStatus(transactionStatusRepository.findByStatusId(2).get());
+			} catch (Exception e) {
+				log.warn("Error setting transaction status. Message:" + e.getMessage());
+			}
+
 			newTransaction.setId(UUID.randomUUID().toString());
 			newTransaction.setStatusTime(LocalDateTime.now());
 			newTransaction.setSource(source.orElse(null));
@@ -367,7 +373,11 @@ public class TransactionServiceImpl implements TransactionService {
 			newTransaction.setTransactionAmount(transaction.getAmount());
 			newTransaction.setNotes(transaction.getNotes());
 
-			result = modelMapper.map(accountTransactionRepository.save(newTransaction), FinancialTransactionDTO.class);
+			FinancialTransaction temp = processTransaction(newTransaction);
+
+			AccountTransaction processedTransaction = modelMapper.map(temp, AccountTransaction.class);
+
+			result = modelMapper.map(accountTransactionRepository.save(processedTransaction), FinancialTransactionDTO.class);
 		} catch (Exception e) {
 			log.warn(e.getMessage());
 		}
@@ -404,6 +414,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 			CardTransaction newTransaction = new CardTransaction();
 
+			try {
+				newTransaction.setTransactionStatus(transactionStatusRepository.findByStatusId(2).get());
+			} catch (Exception e) {
+				log.warn("Error setting transaction status. Message:" + e.getMessage());
+			}
+
 			newTransaction.setId(UUID.randomUUID().toString());
 			newTransaction.setStatusTime(LocalDateTime.now());
 			newTransaction.setSource(source.orElse(null));
@@ -413,7 +429,11 @@ public class TransactionServiceImpl implements TransactionService {
 			newTransaction.setTransactionAmount(transaction.getAmount());
 			newTransaction.setNotes(transaction.getNotes());
 
-			result = modelMapper.map(cardTransactionRepository.save(newTransaction), FinancialTransactionDTO.class);
+			FinancialTransaction temp = processTransaction(newTransaction);
+
+			CardTransaction processedTransaction = modelMapper.map(temp, CardTransaction.class);
+
+			result = modelMapper.map(cardTransactionRepository.save(processedTransaction), FinancialTransactionDTO.class);
 		} catch (Exception e) {
 			log.warn(e.getMessage());
 		}
@@ -448,6 +468,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 			LoanTransaction newTransaction = new LoanTransaction();
 
+			try {
+				newTransaction.setTransactionStatus(transactionStatusRepository.findByStatusId(2).get());
+			} catch (Exception e) {
+				log.warn("Error setting transaction status. Message:" + e.getMessage());
+			}
+
 			newTransaction.setId(UUID.randomUUID().toString());
 			newTransaction.setStatusTime(LocalDateTime.now());
 			newTransaction.setSource(source.orElse(null));
@@ -457,11 +483,56 @@ public class TransactionServiceImpl implements TransactionService {
 			newTransaction.setTransactionAmount(transaction.getAmount());
 			newTransaction.setNotes(transaction.getNotes());
 
-			result = modelMapper.map(loanTransactionRepository.save(newTransaction), FinancialTransactionDTO.class);
+			FinancialTransaction temp = processTransaction(newTransaction);
+
+			LoanTransaction processedTransaction = modelMapper.map(temp, LoanTransaction.class);
+
+			result = modelMapper.map(loanTransactionRepository.save(processedTransaction), FinancialTransactionDTO.class);
+
 		} catch (Exception e) {
 			log.warn(e.getMessage());
 		}
 
 		return result;
+	}
+
+	private FinancialTransaction processTransaction(FinancialTransaction transaction) {
+		log.trace("Process Transaction service start...");
+		log.debug("Process Transaction redceived: " + transaction);
+		FinancialTransaction result = transaction;
+
+		try {
+			ModelMapper modelMapper = new ModelMapper();
+			modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+			Integer sourceBalance = (transaction.getSource().getBalance().getDollars() + transaction.getSource().getBalance().getCents() / 100);
+			Integer targetBalance = (transaction.getTarget().getBalance().getDollars() + transaction.getTarget().getBalance().getCents() / 100);
+			Integer amount = (transaction.getTransactionAmount().getDollars() + transaction.getTransactionAmount().getCents() / 100);
+			if (sourceBalance >= amount && amount <= targetBalance) {
+				log.trace("Transaction resolved as acceptable");
+				try {
+					result.setTransactionStatus(transactionStatusRepository.findByStatusId(3).get());
+				} catch(Exception e) {
+					log.warn("Error setting transaction status. Message:" + e.getMessage());
+				}
+			} else {
+				log.info("Transaction resolved as unacceptable");
+				try {
+					result.setTransactionStatus(transactionStatusRepository.findByStatusId(1).get());
+					if (sourceBalance < amount) {
+						log.trace("Transaction declined due to lack of funds.");
+						result.setNotes("You attempted to pay " + transaction.getTransactionAmount().toString() + " from a source with " + transaction.getSource().getBalance().toString() + ". Due to lack of funds, the transaction has been declined.");}
+					if (amount > targetBalance) {
+						log.info("Transaction declined due to overpayment.");
+						result.setNotes("You attempted to pay " + transaction.getTransactionAmount().toString() + " towards a balance of " + transaction.getTarget().getBalance().toString() + ". This is greater than what was owed, so the transaction was declined.");}
+				} catch(Exception e) {
+					log.warn("Error setting transaction status. Message:" + e.getMessage());
+				}
+			}
+		} catch (Exception e) {
+			log.warn(e.getMessage());
+		}
+		log.trace("Transaction processor finished...");
+		return result;
+
 	}
 }
