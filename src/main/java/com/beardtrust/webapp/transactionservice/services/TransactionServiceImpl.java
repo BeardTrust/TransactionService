@@ -294,17 +294,19 @@ public class TransactionServiceImpl implements TransactionService {
                 }
                 CurrencyValue transactionAmount = new CurrencyValue();
 
-                if (values.length == 2) {
+                if (values.length == 2 && search.contains(".")) {
                     log.trace("Search criteria has two integer values");
                     transactionAmount.setDollars(Integer.parseInt(values[0]));
                     transactionAmount.setCents(Integer.parseInt(values[1]));
+                    transactions =
+                            financialTransactionRepository.findAllBySource_IdAndTransactionAmountOrTarget_IdAndTransactionAmount(assetId, transactionAmount, assetId, transactionAmount, page);
                 } else {
                     log.trace("Search criteria has one integer value");
-                    transactionAmount.setCents(Integer.parseInt(search));
+                    Integer newSearch = Integer.parseInt(search);
+                    transactions =
+                            financialTransactionRepository.findAllBySource_IdAndTransactionAmount_DollarsOrTransactionAmount_CentsOrTarget_IdAndTransactionAmount(assetId, newSearch, newSearch, assetId, transactionAmount, page);
                 }
 
-                transactions =
-                        financialTransactionRepository.findAllBySource_IdAndTransactionAmountOrTarget_IdAndTransactionAmount(assetId, transactionAmount, assetId, transactionAmount, page);
             } else if (GenericValidator.isDate(search, "yyyy-MM-dd", true)) {
                 log.debug("Search criteria is a date");
                 LocalDate searchDate = LocalDate.parse(search);
