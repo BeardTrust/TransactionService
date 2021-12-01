@@ -1,7 +1,6 @@
 package com.beardtrust.webapp.transactionservice.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * This class represents transactions related to a BeardTrust account.
@@ -12,4 +11,5 @@ import javax.persistence.Table;
 @Table(name = "account_transactions")
 public class AccountTransaction extends FinancialTransaction{
 	private static final long serialVersionUID = 4628434455108292689L;
+
 }
