@@ -286,7 +286,7 @@ public class TransactionServiceImpl implements TransactionService {
                 transactions =
                         financialTransactionRepository.findAllBySource_IdOrTarget_IdIs(assetId, assetId, page);
             } else if (isCreatable(search)) {
-                log.info("Search criteria is a number");
+                log.trace("Search criteria is a number");
 
                 String[] values = new String[2];
                 if (search.contains(".")) {
@@ -295,11 +295,11 @@ public class TransactionServiceImpl implements TransactionService {
                 CurrencyValue transactionAmount = new CurrencyValue();
 
                 if (values.length == 2) {
-                    log.info("Search criteria has two integer values");
+                    log.trace("Search criteria has two integer values");
                     transactionAmount.setDollars(Integer.parseInt(values[0]));
                     transactionAmount.setCents(Integer.parseInt(values[1]));
                 } else {
-                    log.info("Search criteria has one integer value");
+                    log.trace("Search criteria has one integer value");
                     transactionAmount.setCents(Integer.parseInt(search));
                 }
 
