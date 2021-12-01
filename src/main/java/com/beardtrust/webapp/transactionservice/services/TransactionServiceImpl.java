@@ -337,7 +337,6 @@ public class TransactionServiceImpl implements TransactionService {
      * @return FinancialTransactionDTO object for the created transaction
      */
     private FinancialTransactionDTO createAccountTransaction(NewTransactionModel transaction) throws IncorrectTransactionSpecializationException {
-        System.out.println("source id found: " + transaction.getSourceId());
         if (transaction.getTransactionSpecialization() != TransactionSpecialization.ACCOUNT) {
             throw new IncorrectTransactionSpecializationException("Unable to create AccountTransaction from " +
                     "NewTransactionModel with " + transaction.getTransactionSpecialization().toString() +
@@ -364,7 +363,7 @@ public class TransactionServiceImpl implements TransactionService {
             } else {
                 source = financialAssetRepository.findById(transaction.getSourceId());
             }
-            if (transaction.getTargetId() == "Withdraw") {
+            if (transaction.getTargetId().equals("Withdrawal")) {
                 targets = accountRepository.findAllByType_IdAndBalance_DollarsGreaterThanAndBalance_IsNegativeIs("3", transaction.getAmount().getDollars(), false);
                 target = financialAssetRepository.findById(targets.get(0).getId());
                 for (int i = 0; i < targets.size(); i++) {
@@ -386,7 +385,6 @@ public class TransactionServiceImpl implements TransactionService {
             } catch (Exception e) {
                 log.warn("Error setting transaction status. Message:" + e.getMessage());
             }
-
             newTransaction.setId(UUID.randomUUID().toString());
             newTransaction.setStatusTime(LocalDateTime.now());
             newTransaction.setSource(source.orElse(null));
@@ -405,7 +403,7 @@ public class TransactionServiceImpl implements TransactionService {
             log.warn(e.getMessage());
         }
 
-
+        System.out.println("Outbound result: " + result);
         return result;
     }
 
@@ -529,7 +527,8 @@ public class TransactionServiceImpl implements TransactionService {
             Integer sourceBalance = (transaction.getSource().getBalance().getDollars() + transaction.getSource().getBalance().getCents() / 100);
             Integer targetBalance = (transaction.getTarget().getBalance().getDollars() + transaction.getTarget().getBalance().getCents() / 100);
             Integer amount = (transaction.getTransactionAmount().getDollars() + transaction.getTransactionAmount().getCents() / 100);
-            if (sourceBalance >= amount && amount <= targetBalance) {
+            log.info("target: " + transaction.getTarget());
+            if (sourceBalance >= amount && amount <= targetBalance || transaction.getTransactionType().getTypeName().equals("Deposit")) {
                 log.trace("Transaction resolved as acceptable");
                 try {
                     result.setTransactionStatus(transactionStatusRepository.findByStatusId(3).get());
@@ -541,11 +540,12 @@ public class TransactionServiceImpl implements TransactionService {
                 try {
                     result.setTransactionStatus(transactionStatusRepository.findByStatusId(1).get());
                     if (sourceBalance < amount) {
-                        log.trace("Transaction declined due to lack of funds.");
+                        log.info("Transaction declined due to lack of funds.");
                         result.setNotes("You attempted to pay " + transaction.getTransactionAmount().toString() + " from a source with " + transaction.getSource().getBalance().toString() + ". Due to lack of funds, the transaction has been declined.");
                     }
-                    if (amount > targetBalance) {
+                    if (amount > targetBalance && !transaction.getTransactionType().getTypeName().equals("Deposit")) {
                         log.info("Transaction declined due to overpayment.");
+                        log.info("target balance: " + targetBalance);
                         result.setNotes("You attempted to pay " + transaction.getTransactionAmount().toString() + " towards a balance of " + transaction.getTarget().getBalance().toString() + ". This is greater than what was owed, so the transaction was declined.");
                     }
                 } catch (Exception e) {

@@ -133,11 +133,13 @@ public class TransactionController {
 //	@PreAuthorize("hasAuthority('admin')")
 	@PostMapping(path = "/transactions")
 	public ResponseEntity<FinancialTransactionDTO> createTransaction(@RequestBody() NewTransactionModel transaction) {
-		log.info("Transaction Model: " + transaction.toString());
+		log.trace("Create Transaction endpoint reached... ");
+		log.debug("Create Transaction received: " + transaction);
 
 		ResponseEntity<FinancialTransactionDTO> response;
 		response = new ResponseEntity<>(transactionService.createTransaction(transaction), HttpStatus.CREATED);
-
+		log.trace("Returning from Create Transaction controller...");
+		log.debug("Create Transaction returning: " + response);
 		return response;
 	}
 
