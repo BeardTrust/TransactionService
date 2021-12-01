@@ -286,18 +286,21 @@ public class TransactionServiceImpl implements TransactionService {
                 transactions =
                         financialTransactionRepository.findAllBySource_IdOrTarget_IdIs(assetId, assetId, page);
             } else if (isCreatable(search)) {
-                log.debug("Search criteria is a number");
+                log.info("Search criteria is a number");
 
-                String[] values = search.split(",");
+                String[] values = new String[2];
+                if (search.contains(".")) {
+                    values = search.split("\\.");
+                }
                 CurrencyValue transactionAmount = new CurrencyValue();
 
                 if (values.length == 2) {
-                    log.debug("Search criteria has two integer values");
+                    log.info("Search criteria has two integer values");
                     transactionAmount.setDollars(Integer.parseInt(values[0]));
                     transactionAmount.setCents(Integer.parseInt(values[1]));
                 } else {
-                    log.debug("Search criteria has one integer value");
-                    transactionAmount.setCents(Integer.parseInt(values[0]));
+                    log.info("Search criteria has one integer value");
+                    transactionAmount.setCents(Integer.parseInt(search));
                 }
 
                 transactions =
